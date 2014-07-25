@@ -30,7 +30,7 @@ For a list of all available options run `./hid -h`:
 hid can return the following exit codes:
 
 	0		Success
-	-1		Invalid Options/Invalid Parameters
+	-1	Invalid Options/Invalid Parameters
 
 ### License
 MIT

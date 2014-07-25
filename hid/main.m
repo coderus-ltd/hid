@@ -1,9 +1,9 @@
 //
 //  main.m
-//  HID_Test
+//  HID
 //
 //  Created by Mark Thomas on 03/06/2014.
-//  Copyright (c) 2014 Mark Thomas. All rights reserved.
+//  Copyright (c) Coderus Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,14 +11,15 @@
 #include <IOKit/hid/IOHIDKeys.h>
 #import <limits.h>
 
-int usage() {
-    NSString *name = [NSProcessInfo.processInfo.arguments[0] lastPathComponent];
+int usage()
+{
+    NSString *name = [[NSProcessInfo.processInfo.arguments objectAtIndex:0] lastPathComponent];
     
     NSLog(@"\n");
     NSLog(@"Usage: %@ -h", name);
     NSLog(@"       %@ list", name);
     NSLog(@"       %@ -l", name);
-    NSLog(@"       %@ -v <vendorId> -p <productId> -setCommand \"exampleCommand1\" \"exampleCommand withParam\" [-t <seconds_to_wait_for_response>] [-n <iterations>]", name);
+    NSLog(@"       %@ -v <vendorId> -p <productId> -setReport \"exampleCommand1\" [\"exampleCommand2\" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]", name);
     NSLog(@"\n");
     NSLog(@"-h                                  Help");
     NSLog(@"list                                Lists all paired devices");
@@ -26,10 +27,9 @@ int usage() {
     NSLog(@"-p <productId>                      Connect to a device with name");
     NSLog(@"-t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command");
     NSLog(@"-n <iterations>                     Number of times to attempt the command");
-    NSLog(@"-setCommand  \"exampleCommand\"       Quoted list of commands to send to the device");
+    NSLog(@"-setReport  \"exampleCommand\"        Quoted list of commands to send to the device");
     
     return 0;
-    
 }
 
 static int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
@@ -99,7 +99,7 @@ void theIOHIDReportCallback ( void *                 context,
     NSMutableString *value = [NSMutableString stringWithCapacity:len];
     
     // skip first byte
-    for (NSUInteger i = 1; i < len-1; ++i){
+    for (NSUInteger i = 1; i < len; ++i){
         [value appendFormat:@"%c", report[i]];
     }
     
@@ -244,7 +244,7 @@ int main(int argc, const char * argv[])
                         CFStringRef prod = get_product_string(dev);
                         CFStringRef transport = get_transport(dev);
                         
-                        NSLog(@"%04xd %04xd - %@ via %@",dev_vid, dev_pid, prod, transport);
+                        NSLog(@"0x%04x 0x%04x - %@ via %@",dev_vid, dev_pid, prod, transport);
                     }
                     else{
                         // this is a device matching our program parameters
@@ -311,7 +311,11 @@ int main(int argc, const char * argv[])
                                     // run current thread runloop for waitTime
                                     // setting returnAfterSourceHandled to true returns immediately
                                     // it doesn't wait for the callback as expected
-                                    CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
+                                    SInt32 res = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
+                                    if ( res == kCFRunLoopRunTimedOut )
+                                    {
+                                      NSLog(@"Command timed out");
+                                    }
                                 }
                             }
                         }

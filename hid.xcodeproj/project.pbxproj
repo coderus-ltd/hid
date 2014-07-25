@@ -33,6 +33,7 @@
 		1A84931919825DC800164DF4 /* hid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hid-Prefix.pch"; sourceTree = "<group>"; };
 		1A84931A19825DC800164DF4 /* hid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hid.1; sourceTree = "<group>"; };
 		1A84932119825DFB00164DF4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		4DF367F719829C19003A7BE0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				1A84931619825DC800164DF4 /* main.m */,
+				4DF367F719829C19003A7BE0 /* README.md */,
 				1A84931A19825DC800164DF4 /* hid.1 */,
 				1A84931819825DC800164DF4 /* Supporting Files */,
 			);
@@ -226,6 +228,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "hid/hid-Prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -236,6 +239,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "hid/hid-Prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -259,6 +263,7 @@
 				1A84932019825DC800164DF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

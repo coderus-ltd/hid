@@ -2,7 +2,7 @@
 
 
 #### Description
-hid is a command line tool to send commands to an attached USB device. hid can also list all attached USB devices.
+hid is a command line tool to send commands to an attached HID device. hid can also list all attached USB devices.
 
 #### Usage 
 For a list of all available options run `./hid -h`:
@@ -12,7 +12,7 @@ For a list of all available options run `./hid -h`:
     Usage: hid -h
            hid list
            hid -l
-           hid -v <vendorId> -p <productId> -setCommand "exampleCommand1" "exampleCommand withParam" [-t <seconds_to_wait_for_response>] [-n <iterations>]
+           hid -v <vendorId> -p <productId> -setCommand "exampleCommand1" ["exampleCommand2" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]
 
     -h                                  Help
     list                                Lists all paired devices
@@ -20,11 +20,11 @@ For a list of all available options run `./hid -h`:
     -p <productId>                      Connect to a device with name
     -t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command
     -n <iterations>                     Number of times to attempt the command
-    -setCommand  "exampleCommand"       Quoted list of commands to send to the device
+    -setReport "exampleCommand"         Quoted list of commands to send to the device
 
 #### Example
 
-`hid -v 0x05ac -p 0x850b -setReport "command" "command withParam" -t 2 -n 5`
+`hid -v 0x05ac -p 0x850b -setReport "command" "another command" -t 2 -n 5`
 
 #### Return Codes
 hid can return the following exit codes:

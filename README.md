@@ -15,7 +15,7 @@ For a list of all available options run `./hid -h`:
            hid -v <vendorId> -p <productId> -setReport "exampleCommand1" ["exampleCommand2" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]
 
     -h                                  Help
-    list                                Lists all paired devices
+    list                                Lists all HID devices
     -v <vendorId>                       Connect to a device with name
     -p <productId>                      Connect to a device with name
     -t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command

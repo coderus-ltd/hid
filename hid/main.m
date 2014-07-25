@@ -22,7 +22,7 @@ int usage()
     NSLog(@"       %@ -v <vendorId> -p <productId> -setReport \"exampleCommand1\" [\"exampleCommand2\" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]", name);
     NSLog(@"\n");
     NSLog(@"-h                                  Help");
-    NSLog(@"list                                Lists all paired devices");
+    NSLog(@"list                                Lists all HID devices");
     NSLog(@"-v <vendorId>                       Connect to a device with name");
     NSLog(@"-p <productId>                      Connect to a device with name");
     NSLog(@"-t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command");

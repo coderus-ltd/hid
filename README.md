@@ -13,6 +13,7 @@ For a list of all available options run `./hid -h`:
            hid list
            hid -l
            hid -v <vendorId> -p <productId> -setReport "exampleCommand1" ["exampleCommand2" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]
+           hid -v <vendorId> -p <productId> -isConnected
 
     -h                                  Help
     list                                Lists all HID devices
@@ -21,6 +22,7 @@ For a list of all available options run `./hid -h`:
     -t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command
     -n <iterations>                     Number of times to attempt the command
     -setReport "exampleCommand"         Quoted list of commands to send to the device
+    -isAtached <YES | NO >              Check to test whether a HID device is attached or not.
 
 #### Example
 
@@ -29,8 +31,9 @@ For a list of all available options run `./hid -h`:
 #### Return Codes
 hid can return the following exit codes:
 
-	0		Success
-	-1	Invalid Options/Invalid Parameters
+	1 Success
+	0 Failure
+  255  Invalid Parameters
 
 ### License
 MIT

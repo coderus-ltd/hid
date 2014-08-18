@@ -33,7 +33,7 @@ hid can return the following exit codes:
 
 	1 Success
 	0 Failure
-  255  Invalid Parameters
+	255  Invalid Parameters
 
 ### License
 MIT

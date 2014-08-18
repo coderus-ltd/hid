@@ -13,7 +13,7 @@ For a list of all available options run `./hid -h`:
            hid list
            hid -l
            hid -v <vendorId> -p <productId> -setReport "exampleCommand1" ["exampleCommand2" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]
-           hid -v <vendorId> -p <productId> -isConnected
+           hid -v <vendorId> -p <productId> -isAtached
 
     -h                                  Help
     list                                Lists all HID devices

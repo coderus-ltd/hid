@@ -303,7 +303,7 @@ int main(int argc, const char * argv[])
                       SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
                       if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
                       {
-                        NSLog(@"No Input report recieved back.");
+                        NSLog(@"No Input report(s) received back.");
                       }
                     }
                   }

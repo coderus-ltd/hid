@@ -31,9 +31,9 @@ For a list of all available options run `./hid -h`:
 #### Return Codes
 hid can return the following exit codes:
 
-	1 Success
-	0 Failure
-	255  Invalid Parameters
+	1	Success
+	0	Failure
+	255	Invalid Parameters
 
 ### License
 MIT

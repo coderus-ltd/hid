@@ -262,15 +262,14 @@ int main(int argc, const char * argv[])
             }
             else
             {
-              const unsigned short outputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
+              const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
               
-              size_t bufferSize = outputReportSize;
-              char *inputBuffer = malloc(bufferSize);
+              char *inputBuffer =  calloc(cOutputReportSize,sizeof(char));
               int  nosReportsReceived;
               
               // register our report callback
               IOHIDDeviceRegisterInputReportCallback(pDeviceRef, (uint8_t *)inputBuffer,
-                                                     bufferSize, (IOHIDReportCallback)theIOHIDReportCallback, &nosReportsReceived);
+                                                     cOutputReportSize, (IOHIDReportCallback)theIOHIDReportCallback, &nosReportsReceived);
               
               // use this run loop
               IOHIDDeviceScheduleWithRunLoop(pDeviceRef, CFRunLoopGetCurrent( ), kCFRunLoopDefaultMode );
@@ -280,10 +279,11 @@ int main(int argc, const char * argv[])
                 // loop through each command for each iteration
                 for (NSString * setReportCommand in setReportCommands)
                 {
-                  size_t setReportSize = MIN([setReportCommand length], bufferSize-1);
+                  #define cReportIDPad 1 // first byte is used for report ID
+                  size_t sendingReportSize = MIN([setReportCommand length], cOutputReportSize - cReportIDPad);
                   
                   inputBuffer[0] = kIOHIDReportTypeOutput;
-                  strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], setReportSize );
+                  strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], sendingReportSize );
                   
                   const uint8_t *data_to_send = (const unsigned char *)inputBuffer;
                   
@@ -291,7 +291,7 @@ int main(int argc, const char * argv[])
                   
                   // send command to device
                   nosReportsReceived = 0;
-                  res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, inputBuffer[0], data_to_send, setReportSize+1);
+                  res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, inputBuffer[0], data_to_send, cOutputReportSize ); // sendingReportSize + cReportIDPad
                   
                   // run current thread runloop for waitTime
                   // setting returnAfterSourceHandled to true returns immediately

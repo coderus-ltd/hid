@@ -306,6 +306,10 @@ int main(int argc, const char * argv[])
                         NSLog(@"No Input report(s) received back.");
                       }
                     }
+                    else
+                    {
+                      NSLog(@"Not waiting for response");
+                    }
                   }
                   else
                   {

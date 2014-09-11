@@ -20,7 +20,7 @@ int usage()
   NSLog(@"       %@ list", name);
   NSLog(@"       %@ -l", name);
   NSLog(@"       %@ -v <vendorId> -p <productId> -setReport \"exampleCommand1\" [\"exampleCommand2\" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]", name);
-  NSLog(@"       %@ -v <vendorId> -p <productId> -isConnected", name);
+  NSLog(@"       %@ -v <vendorId> -p <productId> -isAtached < YES | NO >", name);
   NSLog(@"\n");
   NSLog(@"-h                                  Help");
   NSLog(@"list                                Lists all HID devices");

@@ -160,253 +160,256 @@ int main(int argc, const char * argv[])
 {
   int result;
   
-  if ( argc == 1 )
+  @autoreleasepool
   {
-    result = usage();
-  }
-  else if ( argc == 2 )
-  {
-    if ( strcmp(argv[1],"-h") == 0 )
+    if ( argc == 1 )
     {
       result = usage();
     }
-    else if ( strcmp(argv[1],"list") == 0 )
+    else if ( argc == 2 )
     {
-      result = processHIDs( ^(IOHIDDeviceRef pDeviceRef, unsigned short pVendorID, unsigned short pProductID, BOOL *pStop){
-        
-        CFStringRef prod = get_product_string(pDeviceRef);
-        CFStringRef transport = get_transport(pDeviceRef);
-        
-        NSLog(@"0x%04x 0x%04x - %@ via %@",pVendorID, pProductID, prod, transport);
-        
-        return TRUE;
-      });
-    }
-  }
-  else
-  {
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    
-    unsigned int vendorId = 0, productId = 0;
-    
-    NSString *vendorIdStr = [standardDefaults stringForKey:@"v"];
-    if ( vendorIdStr )
-    {
-      NSScanner* scanner = [NSScanner scannerWithString:vendorIdStr];
-      [scanner scanHexInt:&vendorId];
-    }
-    
-    NSString *productIdStr = [standardDefaults stringForKey:@"p"];
-    if ( productIdStr )
-    {
-      NSScanner* scanner = [NSScanner scannerWithString:productIdStr];
-      [scanner scanHexInt:&productId];
-    }
-    
-    if ( [standardDefaults stringForKey:@"setReport"] )
-    { //
-      //  This command sends setReport's.
-      //
-      NSMutableArray *setReportCommands = [NSMutableArray arrayWithCapacity:1];
-      
-      for (int i = 1; i < argc; i++)
+      if ( strcmp(argv[1],"-h") == 0 )
       {
-        if(strcmp( argv[i], "-setReport" ) == 0 )
-        {
-          for (int j = i+1; j < argc; j++)
-          {
-            if ( argv[j][0] != '-')
-            {
-              [setReportCommands addObject:[NSString stringWithCString:argv[j] encoding:NSUTF8StringEncoding]];
-            }
-            else
-            {
-              // not what we expected quit
-              break;
-            }
-          }
-          break;
-        }
+        result = usage();
       }
-      
-      if ( vendorId && productId && [setReportCommands count] > 0 )
+      else if ( strcmp(argv[1],"list") == 0 )
       {
-        // optional arguments
-        [standardDefaults registerDefaults:@{ @"t": @2, @"n":@1 }];
-        
-        NSInteger waitTime = [standardDefaults integerForKey:@"t"];
-        NSInteger numIterations = [standardDefaults integerForKey:@"n"];
-        
         result = processHIDs( ^(IOHIDDeviceRef pDeviceRef, unsigned short pVendorID, unsigned short pProductID, BOOL *pStop){
           
-          if ( vendorId == pVendorID && productId == pProductID)
+          CFStringRef prod = get_product_string(pDeviceRef);
+          CFStringRef transport = get_transport(pDeviceRef);
+          
+          NSLog(@"0x%04x 0x%04x - %@ via %@",pVendorID, pProductID, prod, transport);
+          
+          return TRUE;
+        });
+      }
+    }
+    else
+    {
+      NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+      
+      unsigned int vendorId = 0, productId = 0;
+      
+      NSString *vendorIdStr = [standardDefaults stringForKey:@"v"];
+      if ( vendorIdStr )
+      {
+        NSScanner* scanner = [NSScanner scannerWithString:vendorIdStr];
+        [scanner scanHexInt:&vendorId];
+      }
+      
+      NSString *productIdStr = [standardDefaults stringForKey:@"p"];
+      if ( productIdStr )
+      {
+        NSScanner* scanner = [NSScanner scannerWithString:productIdStr];
+        [scanner scanHexInt:&productId];
+      }
+      
+      if ( [standardDefaults stringForKey:@"setReport"] )
+      { //
+        //  This command sends setReport's.
+        //
+        NSMutableArray *setReportCommands = [NSMutableArray arrayWithCapacity:1];
+        
+        for (int i = 1; i < argc; i++)
+        {
+          if(strcmp( argv[i], "-setReport" ) == 0 )
           {
-            // open the device
-            IOReturn res = IOHIDDeviceOpen(pDeviceRef, kIOHIDOptionsTypeNone); // kIOHIDOptionsTypeSeizeDevice
-            
-            //error check
-            if (res != kIOReturnSuccess)
+            for (int j = i+1; j < argc; j++)
             {
-              switch (res) {
-                case kIOReturnExclusiveAccess:
-                  NSLog(@"kIOReturnExclusiveAccess: exclusive access and device already open. Restart device.");
-                  break;
-                case kIOReturnNotOpen:
-                  NSLog(@"kIOReturnNotOpen: device not open. Restart device.");
-                  break;
-                  
-                default:
-                  NSLog(@"Ret code: %d", res);
-                  break;
+              if ( argv[j][0] != '-')
+              {
+                [setReportCommands addObject:[NSString stringWithCString:argv[j] encoding:NSUTF8StringEncoding]];
+              }
+              else
+              {
+                // not what we expected quit
+                break;
               }
             }
-            else
+            break;
+          }
+        }
+        
+        if ( vendorId && productId && [setReportCommands count] > 0 )
+        {
+          // optional arguments
+          [standardDefaults registerDefaults:@{ @"t": @2, @"n":@1 }];
+          
+          NSInteger waitTime = [standardDefaults integerForKey:@"t"];
+          NSInteger numIterations = [standardDefaults integerForKey:@"n"];
+          
+          result = processHIDs( ^(IOHIDDeviceRef pDeviceRef, unsigned short pVendorID, unsigned short pProductID, BOOL *pStop){
+            
+            if ( vendorId == pVendorID && productId == pProductID)
             {
-              const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
+              // open the device
+              IOReturn res = IOHIDDeviceOpen(pDeviceRef, kIOHIDOptionsTypeNone); // kIOHIDOptionsTypeSeizeDevice
               
-              char *inputBuffer =  calloc(cOutputReportSize,sizeof(char));
-              int  nosReportsReceived;
-              
-              // register our report callback
-              IOHIDDeviceRegisterInputReportCallback(pDeviceRef, (uint8_t *)inputBuffer,
-                                                     cOutputReportSize, (IOHIDReportCallback)theIOHIDReportCallback, &nosReportsReceived);
-              
-              // use this run loop
-              IOHIDDeviceScheduleWithRunLoop(pDeviceRef, CFRunLoopGetCurrent( ), kCFRunLoopDefaultMode );
-              
-              for(NSInteger x=0; x < numIterations; ++x)
+              //error check
+              if (res != kIOReturnSuccess)
               {
-                // loop through each command for each iteration
-                for (NSString * setReportCommand in setReportCommands)
+                switch (res) {
+                  case kIOReturnExclusiveAccess:
+                    NSLog(@"kIOReturnExclusiveAccess: exclusive access and device already open. Restart device.");
+                    break;
+                  case kIOReturnNotOpen:
+                    NSLog(@"kIOReturnNotOpen: device not open. Restart device.");
+                    break;
+                    
+                  default:
+                    NSLog(@"Ret code: %d", res);
+                    break;
+                }
+              }
+              else
+              {
+                const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
+                
+                char *inputBuffer =  calloc(cOutputReportSize,sizeof(char));
+                int  nosReportsReceived;
+                
+                // register our report callback
+                IOHIDDeviceRegisterInputReportCallback(pDeviceRef, (uint8_t *)inputBuffer,
+                                                       cOutputReportSize, (IOHIDReportCallback)theIOHIDReportCallback, &nosReportsReceived);
+                
+                // use this run loop
+                IOHIDDeviceScheduleWithRunLoop(pDeviceRef, CFRunLoopGetCurrent( ), kCFRunLoopDefaultMode );
+                
+                for(NSInteger x=0; x < numIterations; ++x)
                 {
-                  #define cReportIDPad 1 // first byte is used for report ID
-                  size_t sendingReportSize = MIN([setReportCommand length], cOutputReportSize - cReportIDPad);
-                  
-                  inputBuffer[0] = kIOHIDReportTypeOutput;
-                  strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], sendingReportSize );
-                  
-                  const uint8_t *data_to_send = (const unsigned char *)inputBuffer;
-                  
-                  NSLog(@"Cmd: %@", setReportCommand);
-                  
-                  // send command to device
-                  nosReportsReceived = 0;
-                  res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, inputBuffer[0], data_to_send, cOutputReportSize ); // sendingReportSize + cReportIDPad
-                  
-                  // run current thread runloop for waitTime
-                  // setting returnAfterSourceHandled to true returns immediately
-                  // it doesn't wait for the callback as expected
-                  if ( res == kIOReturnSuccess )
+                  // loop through each command for each iteration
+                  for (NSString * setReportCommand in setReportCommands)
                   {
-                    if ( waitTime )
+                    #define cReportIDPad 1 // first byte is used for report ID
+                    size_t sendingReportSize = MIN([setReportCommand length], cOutputReportSize - cReportIDPad);
+                    
+                    inputBuffer[0] = kIOHIDReportTypeOutput;
+                    strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], sendingReportSize );
+                    
+                    const uint8_t *data_to_send = (const unsigned char *)inputBuffer;
+                    
+                    NSLog(@"Cmd: %@", setReportCommand);
+                    
+                    // send command to device
+                    nosReportsReceived = 0;
+                    res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, inputBuffer[0], data_to_send, cOutputReportSize ); // sendingReportSize + cReportIDPad
+                    
+                    // run current thread runloop for waitTime
+                    // setting returnAfterSourceHandled to true returns immediately
+                    // it doesn't wait for the callback as expected
+                    if ( res == kIOReturnSuccess )
                     {
-                      SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
-                      if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
+                      if ( waitTime )
                       {
-                        NSLog(@"No Input report(s) received back.");
+                        SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
+                        if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
+                        {
+                          NSLog(@"No Input report(s) received back.");
+                        }
+                      }
+                      else
+                      {
+                        NSLog(@"Not waiting for response");
                       }
                     }
                     else
                     {
-                      NSLog(@"Not waiting for response");
+                      NSLog(@"Problem sending the Output report.");
                     }
                   }
-                  else
-                  {
-                    NSLog(@"Problem sending the Output report.");
-                  }
                 }
+                
+                free(inputBuffer);
+                res = IOHIDDeviceClose(pDeviceRef, kIOHIDOptionsTypeNone);
               }
-              
-              free(inputBuffer);
-              res = IOHIDDeviceClose(pDeviceRef, kIOHIDOptionsTypeNone);
+              *pStop = TRUE;
+              return TRUE;
             }
-            *pStop = TRUE;
-            return TRUE;
-          }
+            
+            return FALSE;
+          });
           
-          return FALSE;
-        });
-        
-        if ( !result )
-        {
-          NSLog(@"0x%04x 0x%04x - is not Connected",vendorId, productId);
-        }
-      }
-      else
-      { //
-        // missing arguments
-        //
-        NSLog(@"Missing Params");
-        usage();
-        result = -1;
-      }
-    }
-    else if ( [standardDefaults stringForKey:@"isAttached"] )
-    { //
-      //  This command just check to see if the device is present.
-      //
-      BOOL testingForAttached = [standardDefaults boolForKey:@"isAttached"];
-      
-      if ( vendorId && productId )
-      {
-        result = processHIDs( ^(IOHIDDeviceRef pDeviceRef, unsigned short pVendorID, unsigned short pProductID, BOOL *pStop){
-          
-          if ( pVendorID == vendorId && pProductID == productId)
+          if ( !result )
           {
-            *pStop = TRUE;
-            return TRUE;
-          }
-          
-          return FALSE;
-        });
-        
-        
-        if ( testingForAttached )
-        {
-          if ( result  )
-          {
-            NSLog(@"0x%04x 0x%04x - is attached",vendorId, productId);
-            result = TRUE;
-          }
-          else
-          {
-            NSLog(@"0x%04x 0x%04x - error wasn't attached",vendorId, productId);
+            NSLog(@"0x%04x 0x%04x - is not Connected",vendorId, productId);
           }
         }
         else
+        { //
+          // missing arguments
+          //
+          NSLog(@"Missing Params");
+          usage();
+          result = -1;
+        }
+      }
+      else if ( [standardDefaults stringForKey:@"isAttached"] )
+      { //
+        //  This command just check to see if the device is present.
+        //
+        BOOL testingForAttached = [standardDefaults boolForKey:@"isAttached"];
+        
+        if ( vendorId && productId )
         {
-          if ( result  )
+          result = processHIDs( ^(IOHIDDeviceRef pDeviceRef, unsigned short pVendorID, unsigned short pProductID, BOOL *pStop){
+            
+            if ( pVendorID == vendorId && pProductID == productId)
+            {
+              *pStop = TRUE;
+              return TRUE;
+            }
+            
+            return FALSE;
+          });
+          
+          
+          if ( testingForAttached )
           {
-            NSLog(@"0x%04x 0x%04x - error was still attached ",vendorId, productId);
-            result = FALSE;
+            if ( result  )
+            {
+              NSLog(@"0x%04x 0x%04x - is attached",vendorId, productId);
+              result = TRUE;
+            }
+            else
+            {
+              NSLog(@"0x%04x 0x%04x - error wasn't attached",vendorId, productId);
+            }
           }
           else
           {
-            NSLog(@"0x%04x 0x%04x - is not attached",vendorId, productId);
-            result = TRUE;
+            if ( result  )
+            {
+              NSLog(@"0x%04x 0x%04x - error was still attached ",vendorId, productId);
+              result = FALSE;
+            }
+            else
+            {
+              NSLog(@"0x%04x 0x%04x - is not attached",vendorId, productId);
+              result = TRUE;
+            }
           }
+        }
+        else
+        { //
+          // missing arguments
+          //
+          NSLog(@"Missing Params");
+          usage();
+          result = -1;
         }
       }
       else
       { //
-        // missing arguments
+        // bad arguments
         //
-        NSLog(@"Missing Params");
+        NSLog(@"Invalid Params");
         usage();
         result = -1;
       }
     }
-    else
-    { //
-      // bad arguments
-      //
-      NSLog(@"Invalid Params");
-      usage();
-      result = -1;
-    }
   }
-  
+
   return result;
 }
 

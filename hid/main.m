@@ -20,7 +20,7 @@ int usage()
   NSLog(@"       %@ list", name);
   NSLog(@"       %@ -l", name);
   NSLog(@"       %@ -v <vendorId> -p <productId> -setReport \"exampleCommand1\" [\"exampleCommand2\" ...] [-t <seconds_to_wait_for_response>] [-n <iterations>]", name);
-  NSLog(@"       %@ -v <vendorId> -p <productId> -isAtached < YES | NO >", name);
+  NSLog(@"       %@ -v <vendorId> -p <productId> -isAttached < YES | NO >", name);
   NSLog(@"\n");
   NSLog(@"-h                                  Help");
   NSLog(@"list                                Lists all HID devices");
@@ -29,7 +29,7 @@ int usage()
   NSLog(@"-t <seconds_to_wait_for_response>   Seconds to wait for the device to respond to the command");
   NSLog(@"-n <iterations>                     Number of times to attempt the command");
   NSLog(@"-setReport  \"exampleCommand\"      Quoted list of commands to send to the device");
-  NSLog(@"-isAtached < YES | NO >             Check to test whether a HID device is attached or not.");
+  NSLog(@"-isAttached < YES | NO >             Check to test whether a HID device is attached or not.");
   
   return TRUE;
 }
@@ -125,6 +125,7 @@ int processHIDs(hidItem pItem)
     
     // see how many devices we have
     CFSetRef device_set = IOHIDManagerCopyDevices(hid_mgr);
+    CFRelease(hid_mgr);
     
     /* Convert the list into a C array so we can iterate easily. */
     CFIndex num_devices = CFSetGetCount(device_set);
@@ -158,7 +159,7 @@ int processHIDs(hidItem pItem)
 
 int main(int argc, const char * argv[])
 {
-  int result;
+  int result = 0;
   
   @autoreleasepool
   {
@@ -265,7 +266,6 @@ int main(int argc, const char * argv[])
               else
               {
                 const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
-                
                 char *inputBuffer =  calloc(cOutputReportSize,sizeof(char));
                 int  nosReportsReceived;
                 
@@ -282,7 +282,12 @@ int main(int argc, const char * argv[])
                   for (NSString * setReportCommand in setReportCommands)
                   {
                     #define cReportIDPad 1 // first byte is used for report ID
-                    size_t sendingReportSize = MIN([setReportCommand length], cOutputReportSize - cReportIDPad);
+                    NSInteger reportSize = [setReportCommand length];
+                    size_t sendingReportSize = MIN(reportSize, cOutputReportSize - cReportIDPad);
+                    if(sendingReportSize < reportSize)
+                    {
+                      NSLog(@"%@", @"warn: report larger than maximum size");
+                    }
                     
                     inputBuffer[0] = kIOHIDReportTypeOutput;
                     strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], sendingReportSize );
@@ -321,7 +326,7 @@ int main(int argc, const char * argv[])
                 }
                 
                 free(inputBuffer);
-                res = IOHIDDeviceClose(pDeviceRef, kIOHIDOptionsTypeNone);
+                IOHIDDeviceClose(pDeviceRef, kIOHIDOptionsTypeNone);
               }
               *pStop = TRUE;
               return TRUE;

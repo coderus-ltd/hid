@@ -157,6 +157,29 @@ int processHIDs(hidItem pItem)
   return result;
 }
 
+static const void* dataFromHexString(NSString *string)
+{
+  if([string rangeOfString:@"0x"].location == 0)
+  {
+    string = [string substringFromIndex:2];
+  }
+  const char *chars = [string UTF8String];
+  int i = 0, len = (int)string.length;
+  
+  NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
+  char byteChars[3] = {'\0','\0','\0'};
+  unsigned long wholeByte;
+  
+  while (i < len) {
+    byteChars[0] = chars[i++];
+    byteChars[1] = chars[i++];
+    wholeByte = strtoul(byteChars, NULL, 16);
+    [data appendBytes:&wholeByte length:1];
+  }
+  
+  return [data bytes];
+}
+
 int main(int argc, const char * argv[])
 {
   int result = 0;
@@ -290,7 +313,17 @@ int main(int argc, const char * argv[])
                     }
                     
                     inputBuffer[0] = kIOHIDReportTypeOutput;
-                    strncpy(&inputBuffer[1],[setReportCommand cStringUsingEncoding: NSASCIIStringEncoding], sendingReportSize );
+                    const void* data;
+                    if([setReportCommand length] % 2 == 0 && [setReportCommand rangeOfString:@"0x"].location == 0)
+                    {
+                      data = dataFromHexString(setReportCommand);
+                    }
+                    else
+                    {
+                      data = [setReportCommand cStringUsingEncoding: NSASCIIStringEncoding];
+                    }
+                    
+                    strncpy(&inputBuffer[1], data, sendingReportSize);
                     
                     const uint8_t *data_to_send = (const unsigned char *)inputBuffer;
                     

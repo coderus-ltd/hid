@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1A84931419825DC800164DF4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84931319825DC800164DF4 /* Foundation.framework */; };
-		1A84931719825DC800164DF4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A84931619825DC800164DF4 /* main.m */; };
 		1A84931B19825DC800164DF4 /* hid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1A84931A19825DC800164DF4 /* hid.1 */; };
 		1A84932219825DFB00164DF4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84932119825DFB00164DF4 /* IOKit.framework */; };
+		8D4A6EE519ED5CD40086FCAA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EE419ED5CD40086FCAA /* hid.c */; };
+		8D4A6EEB19ED62030086FCAA /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEA19ED62000086FCAA /* help.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,9 @@
 		1A84931A19825DC800164DF4 /* hid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hid.1; sourceTree = "<group>"; };
 		1A84932119825DFB00164DF4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4DF367F719829C19003A7BE0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		8D4A6EE419ED5CD40086FCAA /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
+		8D4A6EE619ED5F490086FCAA /* builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = builtin.h; sourceTree = "<group>"; };
+		8D4A6EEA19ED62000086FCAA /* help.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +82,10 @@
 		1A84931519825DC800164DF4 /* hid */ = {
 			isa = PBXGroup;
 			children = (
+				8D4A6EE919ED62000086FCAA /* builtin */,
 				1A84931619825DC800164DF4 /* main.m */,
+				8D4A6EE619ED5F490086FCAA /* builtin.h */,
+				8D4A6EE419ED5CD40086FCAA /* hid.c */,
 				4DF367F719829C19003A7BE0 /* README.md */,
 				1A84931A19825DC800164DF4 /* hid.1 */,
 				1A84931819825DC800164DF4 /* Supporting Files */,
@@ -92,6 +99,14 @@
 				1A84931919825DC800164DF4 /* hid-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8D4A6EE919ED62000086FCAA /* builtin */ = {
+			isa = PBXGroup;
+			children = (
+				8D4A6EEA19ED62000086FCAA /* help.c */,
+			);
+			path = builtin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,7 +160,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A84931719825DC800164DF4 /* main.m in Sources */,
+				8D4A6EEB19ED62030086FCAA /* help.c in Sources */,
+				8D4A6EE519ED5CD40086FCAA /* hid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

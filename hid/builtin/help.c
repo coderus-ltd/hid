@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include "builtin.h"
 
 int cmd_help(int argc, const char **argv)
 {

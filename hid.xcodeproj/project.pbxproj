@@ -10,8 +10,11 @@
 		1A84931419825DC800164DF4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84931319825DC800164DF4 /* Foundation.framework */; };
 		1A84931B19825DC800164DF4 /* hid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1A84931A19825DC800164DF4 /* hid.1 */; };
 		1A84932219825DFB00164DF4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84932119825DFB00164DF4 /* IOKit.framework */; };
-		8D4A6EE519ED5CD40086FCAA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EE419ED5CD40086FCAA /* hid.c */; };
 		8D4A6EEB19ED62030086FCAA /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEA19ED62000086FCAA /* help.c */; };
+		8D4A6EED19ED68570086FCAA /* setreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEC19ED68570086FCAA /* setreport.m */; };
+		8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEF19ED69260086FCAA /* hidmanager.m */; };
+		8D4A6EF319ED77370086FCAA /* list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF219ED77370086FCAA /* list.m */; };
+		8D4A6EF519ED7C950086FCAA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EE419ED5CD40086FCAA /* hid.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +41,10 @@
 		8D4A6EE419ED5CD40086FCAA /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
 		8D4A6EE619ED5F490086FCAA /* builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = builtin.h; sourceTree = "<group>"; };
 		8D4A6EEA19ED62000086FCAA /* help.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
+		8D4A6EEC19ED68570086FCAA /* setreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setreport.m; sourceTree = "<group>"; };
+		8D4A6EEF19ED69260086FCAA /* hidmanager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hidmanager.m; sourceTree = "<group>"; };
+		8D4A6EF119ED69300086FCAA /* hidmanager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hidmanager.h; sourceTree = "<group>"; };
+		8D4A6EF219ED77370086FCAA /* list.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = list.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +89,7 @@
 		1A84931519825DC800164DF4 /* hid */ = {
 			isa = PBXGroup;
 			children = (
+				8D4A6EEE19ED68FF0086FCAA /* helper */,
 				8D4A6EE919ED62000086FCAA /* builtin */,
 				1A84931619825DC800164DF4 /* main.m */,
 				8D4A6EE619ED5F490086FCAA /* builtin.h */,
@@ -105,8 +113,19 @@
 			isa = PBXGroup;
 			children = (
 				8D4A6EEA19ED62000086FCAA /* help.c */,
+				8D4A6EF219ED77370086FCAA /* list.m */,
+				8D4A6EEC19ED68570086FCAA /* setreport.m */,
 			);
 			path = builtin;
+			sourceTree = "<group>";
+		};
+		8D4A6EEE19ED68FF0086FCAA /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				8D4A6EF119ED69300086FCAA /* hidmanager.h */,
+				8D4A6EEF19ED69260086FCAA /* hidmanager.m */,
+			);
+			path = helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,8 +179,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D4A6EF319ED77370086FCAA /* list.m in Sources */,
 				8D4A6EEB19ED62030086FCAA /* help.c in Sources */,
-				8D4A6EE519ED5CD40086FCAA /* hid.c in Sources */,
+				8D4A6EED19ED68570086FCAA /* setreport.m in Sources */,
+				8D4A6EF519ED7C950086FCAA /* hid.c in Sources */,
+				8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

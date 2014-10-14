@@ -10,5 +10,7 @@
 #define hid_builtin_h
 
 extern int cmd_help(int argc, const char **argv);
+extern int cmd_list(int argc, const char **argv);
+extern int cmd_setreport(int argc, const char **argv);
 
 #endif

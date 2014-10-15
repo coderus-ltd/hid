@@ -26,8 +26,7 @@ struct cmd_struct
 static struct cmd_struct commands[] =
 {
   { "help", cmd_help, 0 },
-  { "list", cmd_list, 0 },
-  { "setreport", cmd_setreport, 0 },
+  { "list", cmd_list, 0 }
 };
 
 /// Run a command from the struct, performing any setup and applying any options.
@@ -46,28 +45,36 @@ int main(int argc, const char * argv[])
   argv++;
   argc--;
   
-  // Read subcommand
-  const char *cmd = argv[0];
-  
-  // Map --help to help subcommand, adjust argv as needed
-  if(strcmp("--help", argv[1]) == 0)
+  if(argc > 0)
   {
-    argv[1] = argv[0];
-    argv[0] = cmd = "help";
-  }
-  
-  // Find and call the matching subcommand handler
-  for (i = 0; i < ARRAY_SIZE(commands); i++)
-  {
-    struct cmd_struct *p = commands+i;
-    if (strcmp(p->cmd, cmd) == 0)
+    // Read subcommand
+    const char *cmd = argv[0];
+    
+    // Map --help to help subcommand, adjust argv as needed
+    if(argc > 1 && strcmp("--help", argv[1]) == 0)
     {
-      return run_builtin(p, argc, argv);
+      argv[1] = argv[0];
+      argv[0] = cmd = "help";
     }
+    
+    // Find and call the matching subcommand handler
+    for (i = 0; i < ARRAY_SIZE(commands); i++)
+    {
+      struct cmd_struct *p = commands+i;
+      if (strcmp(p->cmd, cmd) == 0)
+      {
+        return run_builtin(p, argc, argv);
+      }
+    }
+    
+    // No matching subcommand handler found!
+    fprintf(stderr, "hid: '%s' is not a valid command. See 'hid --help'.\n", cmd);
+    return 1;
   }
-  
-  // No matching subcommand handler found!
-  fprintf(stderr, "hid: '%s' is not a valid command. See 'hid --help'.\n", cmd);
-  return 1;
+  else
+  {
+    fprintf(stderr, "hid: subcommand required. See 'hid --help'.\n");
+    return 1;
+  }
   
 }

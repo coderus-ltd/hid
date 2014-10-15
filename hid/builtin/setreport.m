@@ -16,7 +16,9 @@ int cmd_setreport(int argc, const char **argv)
   
   // Work with the devices
   return process_devices(argc, argv, ^int(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop) {
+    
     return 0;
+    
   });
   
 }

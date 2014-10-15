@@ -90,7 +90,7 @@ int cmd_setreport(int argc, const char **argv)
     else
     {
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-      [defaults registerDefaults:@{ @"i": @"0", @"t": @"0" }];
+      [defaults registerDefaults:@{ @"i": @"0", @"w": @"0" }];
       
       // Parse the report data
       // TODO: Allow reading from STDIN
@@ -115,7 +115,7 @@ int cmd_setreport(int argc, const char **argv)
       
       // If we are waiting for an input report (w option) then register
       // callback and schedule runloop
-      NSInteger waitTime = [defaults integerForKey:@"t"];
+      NSInteger waitTime = [defaults integerForKey:@"w"];
       int  nosReportsReceived = 0;
       if(waitTime)
       {

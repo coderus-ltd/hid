@@ -16,6 +16,7 @@
 		8D4A6EF519ED7C950086FCAA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EE419ED5CD40086FCAA /* hid.c */; };
 		8D4A6EF719EE7ABC0086FCAA /* setreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEC19ED68570086FCAA /* setreport.m */; };
 		8D4A6EF919EE83160086FCAA /* attached.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF819EE83160086FCAA /* attached.m */; };
+		8D4A6EFB19EE862A0086FCAA /* getreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EFA19EE862A0086FCAA /* getreport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,7 @@
 		8D4A6EF119ED69300086FCAA /* hidmanager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hidmanager.h; sourceTree = "<group>"; };
 		8D4A6EF219ED77370086FCAA /* list.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = list.m; sourceTree = "<group>"; };
 		8D4A6EF819EE83160086FCAA /* attached.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = attached.m; sourceTree = "<group>"; };
+		8D4A6EFA19EE862A0086FCAA /* getreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = getreport.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			children = (
 				8D4A6EEA19ED62000086FCAA /* help.c */,
 				8D4A6EF219ED77370086FCAA /* list.m */,
+				8D4A6EFA19EE862A0086FCAA /* getreport.m */,
 				8D4A6EEC19ED68570086FCAA /* setreport.m */,
 				8D4A6EF819EE83160086FCAA /* attached.m */,
 			);
@@ -188,6 +191,7 @@
 				8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */,
 				8D4A6EF719EE7ABC0086FCAA /* setreport.m in Sources */,
 				8D4A6EF919EE83160086FCAA /* attached.m in Sources */,
+				8D4A6EFB19EE862A0086FCAA /* getreport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

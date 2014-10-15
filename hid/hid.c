@@ -27,7 +27,8 @@ static struct cmd_struct commands[] =
 {
   { "help", cmd_help, 0 },
   { "list", cmd_list, 0 },
-  { "setreport", cmd_setreport, 0 }
+  { "setreport", cmd_setreport, 0 },
+  { "attached", cmd_attached, 0 }
 };
 
 /// Run a command from the struct, performing any setup and applying any options.

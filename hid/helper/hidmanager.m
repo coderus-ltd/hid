@@ -129,7 +129,7 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
     CFRelease(hid_mgr);
     
     /* Convert the list into a C array so we can iterate easily. */
-    CFIndex num_devices = CFSetGetCount(device_set);
+    CFIndex num_devices = (device_set == NULL)? 0 : CFSetGetCount(device_set);
     
     if (num_devices)
     {
@@ -149,7 +149,11 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
       }
       free(device_array);
     }
-    CFRelease(device_set);
+    
+    if(device_set != NULL)
+    {
+      CFRelease(device_set);      
+    }
   }
   
   return result;

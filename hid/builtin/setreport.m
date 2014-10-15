@@ -32,6 +32,31 @@ static NSData* dataFromHexString(NSString *string)
   return data;
 }
 
+static void theIOHIDReportCallback (int*                    counter,
+                             IOReturn                result,
+                             void *                  sender,
+                             IOHIDReportType         type,
+                             uint32_t                reportID,
+                             uint8_t *               report,
+                             CFIndex                 reportLength)
+{
+  // the device responded, so we can stop the runloop
+  if ( type == kIOHIDReportTypeInput )
+  {
+    unsigned long len = strlen((const char*)report);
+    NSMutableString *value = [NSMutableString stringWithCapacity:len];
+    
+    // skip first byte
+    for (NSUInteger i = 1; i < len; ++i){
+      [value appendFormat:@"%c", report[i]];
+    }
+    
+    NSLog(@"%@", value);
+    
+    *counter = *counter +1;
+  }
+}
+
 int cmd_setreport(int argc, const char **argv)
 {
   
@@ -65,7 +90,7 @@ int cmd_setreport(int argc, const char **argv)
     else
     {
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-      [defaults registerDefaults:@{ @"i": @"0" }];
+      [defaults registerDefaults:@{ @"i": @"0", @"t": @"0" }];
       
       // Parse the report data
       // TODO: Allow reading from STDIN
@@ -88,8 +113,19 @@ int cmd_setreport(int argc, const char **argv)
         data = [dataArg dataUsingEncoding:NSUTF8StringEncoding];
       }
       
-      // TODO: If we are waiting for an input report (w option) then register
+      // If we are waiting for an input report (w option) then register
       // callback and schedule runloop
+      NSInteger waitTime = [defaults integerForKey:@"t"];
+      int  nosReportsReceived = 0;
+      if(waitTime)
+      {
+        const unsigned short inputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxInputReportSizeKey));
+        char *inputBuffer =  calloc(inputReportSize, sizeof(char));
+        
+        // register our report callback
+        IOHIDDeviceRegisterInputReportCallback(pDeviceRef, (uint8_t *)inputBuffer, inputReportSize, (IOHIDReportCallback)theIOHIDReportCallback, &nosReportsReceived);
+        IOHIDDeviceScheduleWithRunLoop(pDeviceRef, CFRunLoopGetCurrent( ), kCFRunLoopDefaultMode );
+      }
       
       // Prepare the report
       #define cReportIDPad 1 // first byte is used for report ID
@@ -117,8 +153,20 @@ int cmd_setreport(int argc, const char **argv)
       res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
       if ( res == kIOReturnSuccess )
       {
-        // TODO: verbose mode
-        fprintf(stdout, "report sent\n");
+        // if waiting, then wait
+        if ( waitTime )
+        {
+          SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
+          if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
+          {
+            fprintf(stderr, "error: no input reports recieved after %lds.\n", (long)waitTime);
+          }
+        }
+        else
+        {
+          // TODO: verbose mode
+          fprintf(stdout, "report sent\n");
+        }
         return 0;
       }
       else

@@ -30,11 +30,13 @@ int cmd_info(int argc, const char **argv)
   {
     
     // Output general info
-    fprintf(stdout, "================================================================\n");
-    fprintf(stdout,"%s via %s\n",
+    fprintf(stdout,
+            "================================================================\n"
+            "%s via %s\n"
+            "================================================================\n",
             CFStringCopyUTF8String(get_product_string(pDeviceRef)),
             CFStringCopyUTF8String(get_transport(pDeviceRef)));
-    fprintf(stdout, "================================================================\n");
+    
     CFArrayRef elements =IOHIDDeviceCopyMatchingElements(pDeviceRef,
                                                          NULL,
                                                          0);
@@ -45,12 +47,20 @@ int cmd_info(int argc, const char **argv)
     for(int i = 0; i < num_elements; i++)
     {
       IOHIDElementRef e = elements_array[i];
-      fprintf(stdout, "Element %s\n", CFStringCopyUTF8String(IOHIDElementGetName(e)));
-      fprintf(stdout, "\t%s: %d\n", "Usage Page", IOHIDElementGetUsagePage(e));
-      fprintf(stdout, "\t%s: %d\n", "Usage", IOHIDElementGetUsage(e));
-      fprintf(stdout, "\t%s: %d\n", "Report ID", IOHIDElementGetReportID(e));
-      fprintf(stdout, "\t%s: %d\n", "Report Size", IOHIDElementGetReportSize(e));
-      fprintf(stdout, "\t%s: %d\n", "Report Count", IOHIDElementGetReportCount(e));
+      fprintf(stdout,
+              "Element %s\n"
+              "\t%s: %d\n"
+              "\t%s: %d\n"
+              "\t%s: %d\n"
+              "\t%s: %d\n"
+              "\t%s: %d\n",
+              CFStringCopyUTF8String(IOHIDElementGetName(e)),
+              "Usage Page", IOHIDElementGetUsagePage(e),
+              "Usage", IOHIDElementGetUsage(e),
+              "Report ID", IOHIDElementGetReportID(e),
+              "Report Size", IOHIDElementGetReportSize(e),
+              "Report Count", IOHIDElementGetReportCount(e)
+              );
     }
     
     fprintf(stdout, "\n");

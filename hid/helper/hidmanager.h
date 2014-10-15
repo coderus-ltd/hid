@@ -16,6 +16,8 @@ typedef int (^ProcessDeviceBlock)(int pNumDevices, IOHIDDeviceRef pDeviceRef, BO
 
 int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key);
 CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop);
+int32_t get_int_element_property(IOHIDElementRef element, CFStringRef key);
+CFStringRef get_string_element_property(IOHIDElementRef element, CFStringRef prop);
 unsigned short get_vendor_id(IOHIDDeviceRef device);
 unsigned short get_product_id(IOHIDDeviceRef device);
 int32_t get_location_id(IOHIDDeviceRef device);

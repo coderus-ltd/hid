@@ -39,6 +39,36 @@ CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop )
   return 0;
 }
 
+int32_t get_int_element_property(IOHIDElementRef element, CFStringRef key)
+{
+  CFTypeRef ref;
+  int32_t value;
+  
+  ref = IOHIDElementGetProperty(element, key);
+  
+  if (ref) {
+    if (CFGetTypeID(ref) == CFNumberGetTypeID()) {
+      CFNumberGetValue((CFNumberRef) ref, kCFNumberSInt32Type, &value);
+      return value;
+    }
+  }
+  return 0;
+}
+
+CFStringRef get_string_element_property(IOHIDElementRef element, CFStringRef prop )
+{
+  CFTypeRef ref;
+  
+  ref = IOHIDElementGetProperty(element, prop);
+  
+  if (ref) {
+    if (CFGetTypeID(ref) == CFStringGetTypeID()) {
+      return ref;
+    }
+  }
+  return 0;
+}
+
 int32_t get_location_id(IOHIDDeviceRef device)
 {
   return get_int_property(device, CFSTR(kIOHIDLocationIDKey));

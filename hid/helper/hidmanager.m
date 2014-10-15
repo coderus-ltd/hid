@@ -9,7 +9,7 @@
 
 #import "hidmanager.h"
 
-static int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
+int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
 {
   CFTypeRef ref;
   int32_t value;
@@ -25,7 +25,7 @@ static int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
   return 0;
 }
 
-static CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop )
+CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop )
 {
   CFTypeRef ref;
   

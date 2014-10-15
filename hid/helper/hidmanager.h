@@ -14,6 +14,8 @@
 /// If pStop is set to true, the loop will exit early.
 typedef int (^ProcessDeviceBlock)(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop);
 
+int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key);
+CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop);
 unsigned short get_vendor_id(IOHIDDeviceRef device);
 unsigned short get_product_id(IOHIDDeviceRef device);
 int32_t get_location_id(IOHIDDeviceRef device);

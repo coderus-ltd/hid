@@ -26,7 +26,8 @@ struct cmd_struct
 static struct cmd_struct commands[] =
 {
   { "help", cmd_help, 0 },
-  { "list", cmd_list, 0 }
+  { "list", cmd_list, 0 },
+  { "setreport", cmd_setreport, 0 }
 };
 
 /// Run a command from the struct, performing any setup and applying any options.
@@ -51,7 +52,7 @@ int main(int argc, const char * argv[])
     const char *cmd = argv[0];
     
     // Map --help to help subcommand, adjust argv as needed
-    if(argc > 1 && strcmp("--help", argv[1]) == 0)
+    if(strcmp("--help", argv[argc-1]) == 0)
     {
       argv[1] = argv[0];
       argv[0] = cmd = "help";

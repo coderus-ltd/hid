@@ -35,7 +35,19 @@ int cmd_getreport(int argc, const char **argv)
     else
     {
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-      [defaults registerDefaults:@{ @"i": @"0", @"t": @"0" }];
+      [defaults registerDefaults:@{ @"i": @"0", @"t": @"input" }];
+      
+      // Determine the type of report
+      IOHIDReportType type = kIOHIDReportTypeInput;
+      NSString *typeArg = [defaults stringForKey:@"t"];
+      if([typeArg isEqualToString:@"feature"])
+      {
+        type = kIOHIDReportTypeFeature;
+      }
+      else if([typeArg isEqualToString:@"output"])
+      {
+        type = kIOHIDReportTypeOutput;
+      }
       
       CFIndex inputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxInputReportSizeKey));
       uint8_t *reportBuffer =  calloc(inputReportSize, sizeof(char));

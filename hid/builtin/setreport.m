@@ -90,7 +90,7 @@ int cmd_setreport(int argc, const char **argv)
     else
     {
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-      [defaults registerDefaults:@{ @"i": @"0", @"w": @"0" }];
+      [defaults registerDefaults:@{ @"i": @"0", @"w": @"0", @"t": @"output" }];
       
       // Parse the report data
       // TODO: Allow reading from STDIN
@@ -112,6 +112,15 @@ int cmd_setreport(int argc, const char **argv)
         // String value
         data = [dataArg dataUsingEncoding:NSUTF8StringEncoding];
       }
+      
+      // Determine the type of report
+      IOHIDReportType type = kIOHIDReportTypeOutput;
+      NSString *typeArg = [defaults stringForKey:@"t"];
+      if([typeArg isEqualToString:@"feature"])
+      {
+        type = kIOHIDReportTypeFeature;
+      }
+      
       
       // If we are waiting for an input report (w option) then register
       // callback and schedule runloop
@@ -150,7 +159,7 @@ int cmd_setreport(int argc, const char **argv)
       strncpy(&reportBuffer[1], reportData, sendingReportSize);
       
       // Send the report
-      res = IOHIDDeviceSetReport (pDeviceRef, kIOHIDReportTypeOutput, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
+      res = IOHIDDeviceSetReport (pDeviceRef, type, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
       if ( res == kIOReturnSuccess )
       {
         // if waiting, then wait

@@ -11,7 +11,7 @@
 int cmd_attached(int argc, const char **argv)
 {
    __block BOOL foundDevice = NO;
-  int res = process_devices(argc, argv, ^int(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop)
+  int res = process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop)
   {
     *pStop = YES;
     foundDevice = YES;

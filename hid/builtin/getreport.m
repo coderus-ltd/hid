@@ -9,7 +9,7 @@
 
 int cmd_getreport(int argc, const char **argv)
 {
-  return process_devices(argc, argv, ^int(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop){
+  return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop){
     // For now, we wil always just use the first device
     *pStop = YES;
     

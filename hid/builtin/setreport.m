@@ -63,7 +63,7 @@ int cmd_setreport(int argc, const char **argv)
   // Do any prep
   
   // Work with the devices
-  return process_devices(argc, argv, ^int(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop) {
+  return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop) {
     
     // For now, we wil always just use the first device
     *pStop = YES;

@@ -26,7 +26,7 @@ static char * CFStringCopyUTF8String(CFStringRef aString) {
 
 int cmd_info(int argc, const char **argv)
 {
-  return process_devices(argc, argv, ^int(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop)
+  return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop)
   {
     
     // Output general info

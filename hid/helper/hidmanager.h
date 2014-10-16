@@ -12,7 +12,7 @@
 
 /// Block that is called for every HID device matching the criteria provided to the command.
 /// If pStop is set to true, the loop will exit early.
-typedef int (^ProcessDeviceBlock)(int pNumDevices, IOHIDDeviceRef pDeviceRef, BOOL *pStop);
+typedef int (^ProcessDeviceBlock)(IOHIDDeviceRef pDeviceRef, BOOL *pStop);
 
 int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key);
 CFStringRef get_string_property(IOHIDDeviceRef device, CFStringRef prop);

@@ -125,7 +125,7 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
   
   // Register default options
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults registerDefaults:@{ @"v": @"0", @"p": @"0" }];
+  [defaults registerDefaults:@{ @"v": @"0", @"p": @"0", @"l": @"0" }];
   
   IOHIDManagerRef hid_mgr = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
   
@@ -135,9 +135,10 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
   } else {
     
     // Parse any device-matching options from the command line
-    unsigned int vendorId = 0, productId = 0;
+    unsigned int vendorId = 0, productId = 0, locationId = 0;
     NSString *vendorIdStr = [defaults stringForKey:@"v"];
     NSString *productIdStr = [defaults stringForKey:@"p"];
+    NSString *locationIdStr = [defaults stringForKey:@"l"];
     if ( vendorIdStr )
     {
       NSScanner* scanner = [NSScanner scannerWithString:vendorIdStr];
@@ -147,6 +148,11 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
     {
       NSScanner* scanner = [NSScanner scannerWithString:productIdStr];
       [scanner scanHexInt:&productId];
+    }
+    if ( locationIdStr )
+    {
+      NSScanner* scanner = [NSScanner scannerWithString:locationIdStr];
+      [scanner scanHexInt:&locationId];
     }
     CFMutableDictionaryRef matchingDictionary = create_matching_dictionary(vendorId, productId);
     
@@ -173,7 +179,7 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
         IOHIDDeviceRef dev = device_array[i];
         
         if (dev) {
-          result = block((int)num_devices, dev, &shouldStop);
+          result = block(dev, &shouldStop);
         }
         
       }

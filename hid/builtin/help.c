@@ -20,7 +20,7 @@ int cmd_help(int argc, const char **argv)
             "usage: hid [--help] <command> [args]\n"
             "Basic Commands:\n"
             "    list       List attached HID devices\n"
-            "    info       List information on the elements of attached hid devices\n"
+            "    info       List information on attached hid devices\n"
             "    getreport  Get a report from an attached device\n"
             "    setreport  Set a report for an attached device\n"
             "    attached   Check whether a matching device is attached or not\n"
@@ -53,7 +53,7 @@ int cmd_help(int argc, const char **argv)
     else if(strcmp("info", cmd) == 0)
     {
       fprintf(stdout,
-              "hid info allows you to view information on elements of attached hid devices.\n"
+              "hid info allows you to view information on attached hid devices.\n"
               "usage: hid info [--help] [args]\n"
               "\n"
               "Info doesn't have any specific arguments, see 'hid --help' for common arguments.\n"

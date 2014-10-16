@@ -29,41 +29,45 @@ int cmd_info(int argc, const char **argv)
   return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop)
   {
     
-    // Output general info
+    // Output general info on the device
     fprintf(stdout,
             "================================================================\n"
             "%s via %s\n"
-            "================================================================\n",
+            "================================================================\n"
+            "%s: %04x\n"
+            "%s: %d\n"
+            "%s: %04x\n"
+            "%s: %d\n"
+            "%s: %s\n"
+            "%s: %s\n"
+            "%s: %s\n"
+            "%s: %d\n"
+            "%s: %08x\n"
+            "%s: %x\n"
+            "%s: %d\n"
+            "%s: %d\n"
+            "%s: %d\n"
+            "%s: %d\n"
+            "%s: %d\n"
+            "\n",
             CFStringCopyUTF8String(get_product_string(pDeviceRef)),
-            CFStringCopyUTF8String(get_transport(pDeviceRef)));
-    
-    CFArrayRef elements =IOHIDDeviceCopyMatchingElements(pDeviceRef,
-                                                         NULL,
-                                                         0);
-    CFIndex num_elements = CFArrayGetCount(elements);
-    IOHIDElementRef *elements_array = calloc(num_elements, sizeof(IOHIDElementRef));
-    CFArrayGetValues(elements, CFRangeMake(0, num_elements), (const void **)elements_array);
-    
-    for(int i = 0; i < num_elements; i++)
-    {
-      IOHIDElementRef e = elements_array[i];
-      fprintf(stdout,
-              "Element %s\n"
-              "\t%s: %d\n"
-              "\t%s: %d\n"
-              "\t%s: %d\n"
-              "\t%s: %d\n"
-              "\t%s: %d\n",
-              CFStringCopyUTF8String(IOHIDElementGetName(e)),
-              "Usage Page", IOHIDElementGetUsagePage(e),
-              "Usage", IOHIDElementGetUsage(e),
-              "Report ID", IOHIDElementGetReportID(e),
-              "Report Size", IOHIDElementGetReportSize(e),
-              "Report Count", IOHIDElementGetReportCount(e)
-              );
-    }
-    
-    fprintf(stdout, "\n");
+            CFStringCopyUTF8String(get_transport(pDeviceRef)),
+            kIOHIDVendorIDKey, get_int_property(pDeviceRef, CFSTR(kIOHIDVendorIDKey)),
+            kIOHIDVendorIDSourceKey, get_int_property(pDeviceRef, CFSTR(kIOHIDVendorIDSourceKey)),
+            kIOHIDProductIDKey, get_int_property(pDeviceRef, CFSTR(kIOHIDProductIDKey)),
+            kIOHIDVersionNumberKey, get_int_property(pDeviceRef, CFSTR(kIOHIDVersionNumberKey)),
+            kIOHIDManufacturerKey, CFStringCopyUTF8String(get_string_property(pDeviceRef, CFSTR(kIOHIDManufacturerKey))),
+            kIOHIDProductKey, CFStringCopyUTF8String(get_string_property(pDeviceRef, CFSTR(kIOHIDProductKey))),
+            kIOHIDSerialNumberKey, CFStringCopyUTF8String(get_string_property(pDeviceRef, CFSTR(kIOHIDSerialNumberKey))),
+            kIOHIDCountryCodeKey, get_int_property(pDeviceRef, CFSTR(kIOHIDCountryCodeKey)),
+            kIOHIDLocationIDKey, get_int_property(pDeviceRef, CFSTR(kIOHIDLocationIDKey)),
+            kIOHIDPrimaryUsagePageKey, get_int_property(pDeviceRef, CFSTR(kIOHIDPrimaryUsagePageKey)),
+            kIOHIDPrimaryUsageKey, get_int_property(pDeviceRef, CFSTR(kIOHIDPrimaryUsageKey)),
+            kIOHIDMaxInputReportSizeKey, get_int_property(pDeviceRef, CFSTR(kIOHIDMaxInputReportSizeKey)),
+            kIOHIDMaxOutputReportSizeKey, get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey)),
+            kIOHIDMaxFeatureReportSizeKey, get_int_property(pDeviceRef, CFSTR(kIOHIDMaxFeatureReportSizeKey)),
+            kIOHIDReportIntervalKey, get_int_property(pDeviceRef, CFSTR(kIOHIDReportIntervalKey))
+            );
     
     return 0;
   });

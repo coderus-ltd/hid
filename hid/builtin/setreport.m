@@ -95,35 +95,52 @@ int cmd_setreport(int argc, const char **argv)
       // Parse the report data
       // TODO: Allow reading from STDIN
       NSMutableArray *setReportCommands = [NSMutableArray arrayWithCapacity:1];
-      for (int i = 1; i < argc; i++)
+      
+      if(!isatty(fileno(stdin)))
       {
-        if(strcmp(argv[i], "-d" ) == 0 )
+        // STDIN is not a tty, read from STDIN
+        NSFileHandle *input = [NSFileHandle fileHandleWithStandardInput];
+        NSData *inputData = [NSData dataWithData:[input readDataToEndOfFile]];
+        if(inputData)
         {
-          for (int j = i+1; j < argc; j++)
+          [setReportCommands addObject:inputData];
+        }
+      }
+      else
+      {
+        // STDIN is a tty, read from CLI
+        for (int i = 1; i < argc; i++)
+        {
+          if(strcmp(argv[i], "-d" ) == 0 )
           {
-            if ( argv[j][0] != '-')
+            for (int j = i+1; j < argc; j++)
             {
-              NSString *dataArg = [NSString stringWithCString:argv[j] encoding:NSUTF8StringEncoding];
-              if([dataArg length] % 2 == 0 && [dataArg rangeOfString:@"0x"].location == 0)
+              if ( argv[j][0] != '-')
               {
-                // Hex value
-                [setReportCommands addObject:dataFromHexString(dataArg)];
+                NSString *dataArg = [NSString stringWithCString:argv[j] encoding:NSUTF8StringEncoding];
+                if([dataArg length] % 2 == 0 && [dataArg rangeOfString:@"0x"].location == 0)
+                {
+                  // Hex value
+                  [setReportCommands addObject:dataFromHexString(dataArg)];
+                }
+                else
+                {
+                  // String value
+                  [setReportCommands addObject:[dataArg dataUsingEncoding:NSUTF8StringEncoding]];
+                }
               }
               else
               {
-                // String value
-                [setReportCommands addObject:[dataArg dataUsingEncoding:NSUTF8StringEncoding]];
+                // not what we expected quit
+                break;
               }
             }
-            else
-            {
-              // not what we expected quit
-              break;
-            }
+            break;
           }
-          break;
         }
+
       }
+      
       if(![setReportCommands count])
       {
         fprintf(stderr, "Error: Please specify report data. See 'hid setreport --help'.\n");

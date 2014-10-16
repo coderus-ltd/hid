@@ -91,6 +91,8 @@ int cmd_help(int argc, const char **argv)
               "Arguments:\n"
               "    -d <data>  The data of the report, as hex (prefix with 0x) or as a string.\n"
               "               Multiple data sets can be passed, space separated, and will be set in order.\n"
+              "               Report data can also be piped over STDIN, multiple reports are not supported\n"
+              "               in this case\n"
               "    -t <type>  One of 'output' or 'feature' [default: output]\n"
               "    -i <id>    Use the given report ID [default: 0]\n"
               "    -w <time>  If provided, the command will wait for an input report for the\n"

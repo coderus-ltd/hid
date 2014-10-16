@@ -127,7 +127,7 @@ int cmd_setreport(int argc, const char **argv)
       if(![setReportCommands count])
       {
         fprintf(stderr, "Error: Please specify report data. See 'hid setreport --help'.\n");
-        return 1;
+        return 255;
       }
       
       // Determine the type of report

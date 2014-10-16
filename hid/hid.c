@@ -96,12 +96,12 @@ int main(int argc, const char * argv[])
     
     // No matching subcommand handler found!
     fprintf(stderr, "hid: '%s' is not a valid command. See 'hid --help'.\n", cmd);
-    return 1;
   }
   else
   {
     fprintf(stderr, "hid: subcommand required. See 'hid --help'.\n");
-    return 1;
   }
+  
+  return 255;
   
 }

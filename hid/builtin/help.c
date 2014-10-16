@@ -35,7 +35,7 @@ int cmd_help(int argc, const char **argv)
             "    -v <hex>   Filter by the given vendor ID\n"
             "    -p <hex>   Filter by the given product ID\n"
             "\n"
-            "See 'hid help <command> for more information on a specific command.\n");
+            "See 'hid help <command>' for more information on a specific command.\n");
     
   } else {
     

@@ -49,6 +49,21 @@ int main(int argc, const char * argv[])
   argv++;
   argc--;
   
+  // Find the iteration count
+  int iterations = 1;
+  for (i = 0; i < argc; i++)
+  {
+    if(strcmp("-n", argv[i]) == 0 && i+1 < argc)
+    {
+      sscanf(argv[i+1], "%d", &iterations);
+      if(iterations < 1)
+      {
+        iterations = 1;
+      }
+      break;
+    }
+  }
+  
   if(argc > 0)
   {
     // Read subcommand
@@ -67,7 +82,15 @@ int main(int argc, const char * argv[])
       struct cmd_struct *p = commands+i;
       if (strcmp(p->cmd, cmd) == 0)
       {
-        return run_builtin(p, argc, argv);
+        int ret = 0;
+        for(i = 0; i < iterations; i++)
+        {
+          ret = run_builtin(p, argc, argv);
+          if(ret != 0){
+            return ret;
+          }
+        }
+        return ret;
       }
     }
     

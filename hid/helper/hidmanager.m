@@ -125,7 +125,7 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
   
   // Register default options
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults registerDefaults:@{ @"v": @"0", @"p": @"0", @"l": @"0" }];
+  [defaults registerDefaults:@{ @"v": @"0", @"p": @"0", @"l": @"0xFFFFFFFF" }];
   
   IOHIDManagerRef hid_mgr = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
   
@@ -135,7 +135,7 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
   } else {
     
     // Parse any device-matching options from the command line
-    unsigned int vendorId = 0, productId = 0, locationId = 0;
+    uint32_t vendorId = 0, productId = 0, locationId = 0;
     NSString *vendorIdStr = [defaults stringForKey:@"v"];
     NSString *productIdStr = [defaults stringForKey:@"p"];
     NSString *locationIdStr = [defaults stringForKey:@"l"];
@@ -179,7 +179,9 @@ int process_devices(int argc, const char **argv, ProcessDeviceBlock block)
         IOHIDDeviceRef dev = device_array[i];
         
         if (dev) {
-          result = block(dev, &shouldStop);
+          if(locationId == UINT32_MAX || get_location_id(dev) == locationId){
+            result = block(dev, &shouldStop);
+          }
         }
         
       }

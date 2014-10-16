@@ -31,6 +31,7 @@ int cmd_help(int argc, const char **argv)
             "Filtering Devices:\n"
             "Arguments can be provided to filter the devices to run the command against.\n"
             "example: hid list -v 0x19b5\n"
+            "    -l <hex>   Filter by the given location ID\n"
             "    -v <hex>   Filter by the given vendor ID\n"
             "    -p <hex>   Filter by the given product ID\n"
             "\n"

@@ -94,23 +94,40 @@ int cmd_setreport(int argc, const char **argv)
       
       // Parse the report data
       // TODO: Allow reading from STDIN
-      NSString *dataArg = [defaults stringForKey:@"d"];
-      NSData *data = nil;
-      if(!dataArg)
+      NSMutableArray *setReportCommands = [NSMutableArray arrayWithCapacity:1];
+      for (int i = 1; i < argc; i++)
+      {
+        if(strcmp(argv[i], "-d" ) == 0 )
+        {
+          for (int j = i+1; j < argc; j++)
+          {
+            if ( argv[j][0] != '-')
+            {
+              NSString *dataArg = [NSString stringWithCString:argv[j] encoding:NSUTF8StringEncoding];
+              if([dataArg length] % 2 == 0 && [dataArg rangeOfString:@"0x"].location == 0)
+              {
+                // Hex value
+                [setReportCommands addObject:dataFromHexString(dataArg)];
+              }
+              else
+              {
+                // String value
+                [setReportCommands addObject:[dataArg dataUsingEncoding:NSUTF8StringEncoding]];
+              }
+            }
+            else
+            {
+              // not what we expected quit
+              break;
+            }
+          }
+          break;
+        }
+      }
+      if(![setReportCommands count])
       {
         fprintf(stderr, "Error: Please specify report data. See 'hid setreport --help'.\n");
         return 1;
-      }
-      
-      if([dataArg length] % 2 == 0 && [dataArg rangeOfString:@"0x"].location == 0)
-      {
-        // Hex value
-        data = dataFromHexString(dataArg);
-      }
-      else
-      {
-        // String value
-        data = [dataArg dataUsingEncoding:NSUTF8StringEncoding];
       }
       
       // Determine the type of report
@@ -138,51 +155,53 @@ int cmd_setreport(int argc, const char **argv)
       
       // Prepare the report
       #define cReportIDPad 1 // first byte is used for report ID
-      const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
-      NSUInteger reportSize = [data length];
-      const char* reportData = [data bytes];
-      
-      
-      size_t sendingReportSize = MIN(reportSize, cOutputReportSize - cReportIDPad);
-      char *reportBuffer =  calloc(cOutputReportSize,sizeof(char));
-      if(sendingReportSize < reportSize)
+      for(NSData *data in setReportCommands)
       {
-        // TODO: verbose mode
-        NSLog(@"%@", @"warn: report larger than maximum size");
-      }
-      
-      // get the report id
-      unsigned short reportId = (unsigned short)[defaults integerForKey:@"i"];
-      reportBuffer[0] = reportId;
-      
-      // Copy data into the buffer
-      strncpy(&reportBuffer[1], reportData, sendingReportSize);
-      
-      // Send the report
-      res = IOHIDDeviceSetReport (pDeviceRef, type, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
-      if ( res == kIOReturnSuccess )
-      {
-        // if waiting, then wait
-        if ( waitTime )
+        const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
+        NSUInteger reportSize = [data length];
+        const char* reportData = [data bytes];
+        
+        size_t sendingReportSize = MIN(reportSize, cOutputReportSize - cReportIDPad);
+        char *reportBuffer =  calloc(cOutputReportSize,sizeof(char));
+        if(sendingReportSize < reportSize)
         {
-          SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
-          if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
+          // TODO: verbose mode
+          NSLog(@"%@", @"warn: report larger than maximum size");
+        }
+        
+        // get the report id
+        unsigned short reportId = (unsigned short)[defaults integerForKey:@"i"];
+        reportBuffer[0] = reportId;
+        
+        // Copy data into the buffer
+        strncpy(&reportBuffer[1], reportData, sendingReportSize);
+        
+        // Send the report
+        res = IOHIDDeviceSetReport (pDeviceRef, type, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
+        if ( res == kIOReturnSuccess )
+        {
+          // if waiting, then wait
+          if ( waitTime )
           {
-            fprintf(stderr, "error: no input reports recieved after %lds.\n", (long)waitTime);
+            SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
+            if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
+            {
+              fprintf(stderr, "error: no input reports recieved after %lds.\n", (long)waitTime);
+            }
+          }
+          else
+          {
+            // TODO: verbose mode
+            fprintf(stdout, "report sent\n");
           }
         }
         else
         {
-          // TODO: verbose mode
-          fprintf(stdout, "report sent\n");
+          fprintf(stderr, "error: report not sent (code %d)", res);
+          return 1;
         }
-        return 0;
       }
-      else
-      {
-        fprintf(stderr, "error: report not sent (code %d)", res);
-        return 1;
-      }
+      return 0;
     }
   });
   

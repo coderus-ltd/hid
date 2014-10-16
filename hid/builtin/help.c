@@ -74,7 +74,7 @@ int cmd_help(int argc, const char **argv)
     {
       fprintf(stdout,
               "hid getreport allows you to get a report from an attached hid device.\n"
-              "usage: hid getreport [--help] [-t <type>] [-i <report_id>]\n"
+              "usage: hid getreport [--help] [-t input|output|feature] [-i <report_id>]\n"
               "\n"
               "If more than one device is matched, the first-discovered matching device is used.\n"
               );
@@ -83,13 +83,14 @@ int cmd_help(int argc, const char **argv)
     {
       fprintf(stdout,
               "hid setreport allows you to send a report to an attached hid device.\n"
-              "usage: hid setreport [--help] [-t <type>] [-i <id>] [-w <time>] -d <data>\n"
+              "usage: hid setreport [--help] [-t output|feature] [-i <id>] [-w <time>] -d <data> [data...]\n"
               "\n"
               "This command is a WIP and therefore is incomplete and may change.\n"
               "If more than one device is matched, the first-discovered matching device is used.\n"
               "\n"
               "Arguments:\n"
-              "    -d <data>  The data of the report, as hex (prefix with 0x) or as a string\n"
+              "    -d <data>  The data of the report, as hex (prefix with 0x) or as a string.\n"
+              "               Multiple data sets can be passed, space separated, and will be set in order.\n"
               "    -t <type>  One of 'output' or 'feature' [default: output]\n"
               "    -i <id>    Use the given report ID [default: 0]\n"
               "    -w <time>  If provided, the command will wait for an input report for the\n"

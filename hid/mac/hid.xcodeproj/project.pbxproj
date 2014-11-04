@@ -10,14 +10,14 @@
 		1A84931419825DC800164DF4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84931319825DC800164DF4 /* Foundation.framework */; };
 		1A84931B19825DC800164DF4 /* hid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1A84931A19825DC800164DF4 /* hid.1 */; };
 		1A84932219825DFB00164DF4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84932119825DFB00164DF4 /* IOKit.framework */; };
-		8D4A6EEB19ED62030086FCAA /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEA19ED62000086FCAA /* help.c */; };
 		8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEF19ED69260086FCAA /* hidmanager.m */; };
 		8D4A6EF319ED77370086FCAA /* list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF219ED77370086FCAA /* list.m */; };
-		8D4A6EF519ED7C950086FCAA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EE419ED5CD40086FCAA /* hid.c */; };
 		8D4A6EF719EE7ABC0086FCAA /* setreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEC19ED68570086FCAA /* setreport.m */; };
 		8D4A6EF919EE83160086FCAA /* attached.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF819EE83160086FCAA /* attached.m */; };
 		8D4A6EFB19EE862A0086FCAA /* getreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EFA19EE862A0086FCAA /* getreport.m */; };
 		8D4A6EFD19EE8F540086FCAA /* info.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EFC19EE8F540086FCAA /* info.m */; };
+		8DBFE2321A09345D00109CBA /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 8DBFE22F1A09345D00109CBA /* help.c */; };
+		8DBFE2331A09345D00109CBA /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8DBFE2311A09345D00109CBA /* hid.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,14 +36,9 @@
 /* Begin PBXFileReference section */
 		1A84931019825DC800164DF4 /* hid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hid; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A84931319825DC800164DF4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1A84931619825DC800164DF4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		1A84931919825DC800164DF4 /* hid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hid-Prefix.pch"; sourceTree = "<group>"; };
+		1A84931919825DC800164DF4 /* hid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hid-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		1A84931A19825DC800164DF4 /* hid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hid.1; sourceTree = "<group>"; };
 		1A84932119825DFB00164DF4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		4DF367F719829C19003A7BE0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
-		8D4A6EE419ED5CD40086FCAA /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
-		8D4A6EE619ED5F490086FCAA /* builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = builtin.h; sourceTree = "<group>"; };
-		8D4A6EEA19ED62000086FCAA /* help.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
 		8D4A6EEC19ED68570086FCAA /* setreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setreport.m; sourceTree = "<group>"; };
 		8D4A6EEF19ED69260086FCAA /* hidmanager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hidmanager.m; sourceTree = "<group>"; };
 		8D4A6EF119ED69300086FCAA /* hidmanager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hidmanager.h; sourceTree = "<group>"; };
@@ -51,6 +46,9 @@
 		8D4A6EF819EE83160086FCAA /* attached.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = attached.m; sourceTree = "<group>"; };
 		8D4A6EFA19EE862A0086FCAA /* getreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = getreport.m; sourceTree = "<group>"; };
 		8D4A6EFC19EE8F540086FCAA /* info.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = info.m; sourceTree = "<group>"; };
+		8DBFE22F1A09345D00109CBA /* help.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
+		8DBFE2301A09345D00109CBA /* builtin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builtin.h; sourceTree = "<group>"; };
+		8DBFE2311A09345D00109CBA /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,17 +93,14 @@
 		1A84931519825DC800164DF4 /* hid */ = {
 			isa = PBXGroup;
 			children = (
+				8DBFE22D1A0933E600109CBA /* common */,
 				8D4A6EEE19ED68FF0086FCAA /* helper */,
 				8D4A6EE919ED62000086FCAA /* builtin */,
-				1A84931619825DC800164DF4 /* main.m */,
-				8D4A6EE619ED5F490086FCAA /* builtin.h */,
-				8D4A6EE419ED5CD40086FCAA /* hid.c */,
-				4DF367F719829C19003A7BE0 /* README.md */,
 				1A84931A19825DC800164DF4 /* hid.1 */,
 				1A84931819825DC800164DF4 /* Supporting Files */,
 			);
-			path = hid;
-			sourceTree = "<group>";
+			name = hid;
+			sourceTree = SOURCE_ROOT;
 		};
 		1A84931819825DC800164DF4 /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -118,7 +113,6 @@
 		8D4A6EE919ED62000086FCAA /* builtin */ = {
 			isa = PBXGroup;
 			children = (
-				8D4A6EEA19ED62000086FCAA /* help.c */,
 				8D4A6EF219ED77370086FCAA /* list.m */,
 				8D4A6EFA19EE862A0086FCAA /* getreport.m */,
 				8D4A6EEC19ED68570086FCAA /* setreport.m */,
@@ -135,6 +129,25 @@
 				8D4A6EEF19ED69260086FCAA /* hidmanager.m */,
 			);
 			path = helper;
+			sourceTree = SOURCE_ROOT;
+		};
+		8DBFE22D1A0933E600109CBA /* common */ = {
+			isa = PBXGroup;
+			children = (
+				8DBFE22E1A09345D00109CBA /* builtin */,
+				8DBFE2301A09345D00109CBA /* builtin.h */,
+				8DBFE2311A09345D00109CBA /* hid.c */,
+			);
+			name = common;
+			path = ../common;
+			sourceTree = SOURCE_ROOT;
+		};
+		8DBFE22E1A09345D00109CBA /* builtin */ = {
+			isa = PBXGroup;
+			children = (
+				8DBFE22F1A09345D00109CBA /* help.c */,
+			);
+			path = builtin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,9 +202,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D4A6EF319ED77370086FCAA /* list.m in Sources */,
-				8D4A6EEB19ED62030086FCAA /* help.c in Sources */,
-				8D4A6EF519ED7C950086FCAA /* hid.c in Sources */,
+				8DBFE2321A09345D00109CBA /* help.c in Sources */,
 				8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */,
+				8DBFE2331A09345D00109CBA /* hid.c in Sources */,
 				8D4A6EF719EE7ABC0086FCAA /* setreport.m in Sources */,
 				8D4A6EFD19EE8F540086FCAA /* info.m in Sources */,
 				8D4A6EF919EE83160086FCAA /* attached.m in Sources */,
@@ -277,7 +290,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "hid/hid-Prefix.pch";
+				GCC_PREFIX_HEADER = "hid-Prefix.pch";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -288,7 +301,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "hid/hid-Prefix.pch";
+				GCC_PREFIX_HEADER = "hid-Prefix.pch";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

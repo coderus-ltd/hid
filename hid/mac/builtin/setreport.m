@@ -205,7 +205,7 @@ int cmd_setreport(int argc, const char **argv)
             SInt32 runLoopRes = CFRunLoopRunInMode(kCFRunLoopDefaultMode, waitTime, false);
             if ( runLoopRes == kCFRunLoopRunTimedOut && nosReportsReceived == 0 )
             {
-              fprintf(stderr, "error: no input reports recieved after %lds.\n", (long)waitTime);
+              fprintf(stderr, "error: no input reports received after %lds.\n", (long)waitTime);
             }
           }
           else

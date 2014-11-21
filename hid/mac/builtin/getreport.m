@@ -39,17 +39,20 @@ int cmd_getreport(int argc, const char **argv)
       
       // Determine the type of report
       IOHIDReportType type = kIOHIDReportTypeInput;
+      CFStringRef reportSizeKey = CFSTR(kIOHIDMaxInputReportSizeKey);
       NSString *typeArg = [defaults stringForKey:@"t"];
       if([typeArg isEqualToString:@"feature"])
       {
         type = kIOHIDReportTypeFeature;
+        reportSizeKey = CFSTR(kIOHIDMaxFeatureReportSizeKey);
       }
       else if([typeArg isEqualToString:@"output"])
       {
         type = kIOHIDReportTypeOutput;
+        reportSizeKey = CFSTR(kIOHIDMaxOutputReportSizeKey);
       }
       
-      CFIndex inputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxInputReportSizeKey));
+      CFIndex inputReportSize = get_int_property(pDeviceRef, reportSizeKey);
       uint8_t *reportBuffer =  calloc(inputReportSize, sizeof(char));
       
       const unsigned short reportId = (unsigned short)[defaults integerForKey:@"i"];
@@ -68,15 +71,19 @@ int cmd_getreport(int argc, const char **argv)
       }
       else
       {
-        // Convert the report somehow, for now - just convert to a string
-        unsigned long len = strlen((const char*)reportBuffer);
-        NSMutableString *value = [NSMutableString stringWithCapacity:len];
+        char str[inputReportSize*3];
         
-        // skip first byte
-        for (NSUInteger i = 1; i < len; ++i){
-          [value appendFormat:@"%c", reportBuffer[i]];
+        unsigned char * pin = reportBuffer;
+        const char * hex = "0123456789ABCDEF";
+        char * pout = str;
+        for(; pin < reportBuffer+inputReportSize; pout+=3, pin++){
+          pout[0] = hex[(*pin>>4) & 0xF];
+          pout[1] = hex[ *pin     & 0xF];
+          pout[2] = ':';
         }
-        NSLog(@"%@", value);
+        pout[-1] = 0;
+        
+        printf("%s\n", str);
       }
       
     }

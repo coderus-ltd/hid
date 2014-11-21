@@ -149,10 +149,12 @@ int cmd_setreport(int argc, const char **argv)
       
       // Determine the type of report
       IOHIDReportType type = kIOHIDReportTypeOutput;
+      CFStringRef reportSizeKey = CFSTR(kIOHIDMaxOutputReportSizeKey);
       NSString *typeArg = [defaults stringForKey:@"t"];
       if([typeArg isEqualToString:@"feature"])
       {
         type = kIOHIDReportTypeFeature;
+        reportSizeKey = CFSTR(kIOHIDMaxFeatureReportSizeKey);
       }
       
       
@@ -174,7 +176,7 @@ int cmd_setreport(int argc, const char **argv)
       #define cReportIDPad 1 // first byte is used for report ID
       for(NSData *data in setReportCommands)
       {
-        const unsigned short cOutputReportSize = get_int_property(pDeviceRef, CFSTR(kIOHIDMaxOutputReportSizeKey));
+        const unsigned short cOutputReportSize = get_int_property(pDeviceRef, reportSizeKey);
         NSUInteger reportSize = [data length];
         const char* reportData = [data bytes];
         
@@ -194,7 +196,7 @@ int cmd_setreport(int argc, const char **argv)
         strncpy(&reportBuffer[1], reportData, sendingReportSize);
         
         // Send the report
-        res = IOHIDDeviceSetReport (pDeviceRef, type, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize );
+        res = IOHIDDeviceSetReport (pDeviceRef, type, reportBuffer[0], (const unsigned char *)reportBuffer, cOutputReportSize);
         if ( res == kIOReturnSuccess )
         {
           // if waiting, then wait
@@ -214,7 +216,7 @@ int cmd_setreport(int argc, const char **argv)
         }
         else
         {
-          fprintf(stderr, "error: report not sent (code %d)", res);
+          fprintf(stderr, "error: report not sent (code %d)\n", res);
           return 1;
         }
       }

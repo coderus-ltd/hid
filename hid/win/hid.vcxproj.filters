@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{f669bcfe-9d4d-4faa-8d31-1cac58f58e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\builtin">
+      <UniqueIdentifier>{8ea33030-44ce-41a5-831c-bdf9d91659c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\builtin">
+      <UniqueIdentifier>{688bc091-e721-4170-807b-6337f5970a04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\helper">
+      <UniqueIdentifier>{91902f77-5423-4a89-b7fa-4f5e627dbeba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\hid.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\builtin\help.c">
+      <Filter>common\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\hidmanager.cpp">
+      <Filter>Source Files\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="builtin\list.cpp">
+      <Filter>Source Files\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="builtin\setreport.cpp">
+      <Filter>Source Files\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="builtin\info.cpp">
+      <Filter>Source Files\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="builtin\getreport.cpp">
+      <Filter>Source Files\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="builtin\attached.cpp">
+      <Filter>Source Files\builtin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\builtin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\hidmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

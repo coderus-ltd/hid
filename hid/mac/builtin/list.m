@@ -31,7 +31,7 @@ int cmd_list(int argc, const char **argv)
   fprintf(stdout, "LID     \tVID \tPID \tDescription\n");
   return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop)
   {
-    fprintf(stdout,"%08x\t%04x\t%04x\t%s via %s\n",
+    fprintf(stdout,"0x%08x\t0x%04x\t0x%04x\t%s via %s\n",
             get_location_id(pDeviceRef),
             get_vendor_id(pDeviceRef),
             get_product_id(pDeviceRef),

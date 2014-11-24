@@ -32,7 +32,11 @@ static NSData* dataFromHexString(NSString *string)
   return data;
 }
 
-static void theIOHIDReportCallback (int*                    counter,
+static int margc;
+static const char **margv;
+
+static void theIOHIDReportCallback (
+                             int*                    counter,
                              IOReturn                result,
                              void *                  sender,
                              IOHIDReportType         type,
@@ -43,17 +47,36 @@ static void theIOHIDReportCallback (int*                    counter,
   // the device responded, so we can stop the runloop
   if ( type == kIOHIDReportTypeInput )
   {
-    unsigned long len = strlen((const char*)report);
-    NSMutableString *value = [NSMutableString stringWithCapacity:len];
     
-    // skip first byte
-    for (NSUInteger i = 1; i < len; ++i){
-      [value appendFormat:@"%c", report[i]];
+    // Parse out options
+    BOOL addNewline = YES;
+    BOOL removeReportId = YES;
+    
+    for (int i = 0; i < margc; i++)
+    {
+      if(strcmp("-r", margv[i]) == 0)
+      {
+        removeReportId = NO;
+      }
+      
+      if(strcmp("-o", margv[i]) == 0)
+      {
+        addNewline = NO;
+      }
+    }
+
+    
+    // Remove the report ID byte
+    if(removeReportId)
+    {
+      report++;
+      reportLength--;
     }
     
-    NSLog(@"%@", value);
+    // raw output
+    fprintf(stdout, (addNewline)? "%s\n" : "%s", report);
     
-    *counter = *counter +1;
+    *counter = *counter+1;
   }
 }
 
@@ -61,6 +84,8 @@ int cmd_setreport(int argc, const char **argv)
 {
   
   // Do any prep
+  margc = argc;
+  margv = argv;
   
   // Work with the devices
   return process_devices(argc, argv, ^int(IOHIDDeviceRef pDeviceRef, BOOL *pStop) {

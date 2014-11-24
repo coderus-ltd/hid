@@ -97,6 +97,8 @@ int cmd_help(int argc, const char **argv)
               "    -i <id>    Use the given report ID [default: 0]\n"
               "    -w <time>  If provided, the command will wait for an input report for the\n"
               "               given number of seconds\n"
+              "    -r         Do not remove the report ID byte from any recieved input reports\n"
+              "    -o         Do not add a newline to the end of any recieved input reports\n"
               "\n"
               "For information on specifying a device, see 'hid --help'.\n"
               );

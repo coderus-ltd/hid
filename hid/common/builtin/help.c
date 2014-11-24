@@ -99,6 +99,7 @@ int cmd_help(int argc, const char **argv)
               "               given number of seconds\n"
               "    -r         Do not remove the report ID byte from any received input reports\n"
               "    -o         Do not add a newline to the end of any received input reports\n"
+              "    -x         Output any received input reports as human readable hex\n"
               "\n"
               "For information on specifying a device, see 'hid --help'.\n"
               );

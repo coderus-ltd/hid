@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Coderus. All rights reserved.
 //
 #import "hidmanager.h"
+#import "util.h"
 
 #include "builtin.h"
 
@@ -47,35 +48,7 @@ static void theIOHIDReportCallback (
   // the device responded, so we can stop the runloop
   if ( type == kIOHIDReportTypeInput )
   {
-    
-    // Parse out options
-    BOOL addNewline = YES;
-    BOOL removeReportId = YES;
-    
-    for (int i = 0; i < margc; i++)
-    {
-      if(strcmp("-r", margv[i]) == 0)
-      {
-        removeReportId = NO;
-      }
-      
-      if(strcmp("-o", margv[i]) == 0)
-      {
-        addNewline = NO;
-      }
-    }
-
-    
-    // Remove the report ID byte
-    if(removeReportId)
-    {
-      report++;
-      reportLength--;
-    }
-    
-    // raw output
-    fprintf(stdout, (addNewline)? "%s\n" : "%s", report);
-    
+    output_report(report, (int)reportLength, margc, margv);
     *counter = *counter+1;
   }
 }

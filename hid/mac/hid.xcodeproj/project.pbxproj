@@ -10,6 +10,7 @@
 		1A84931419825DC800164DF4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84931319825DC800164DF4 /* Foundation.framework */; };
 		1A84931B19825DC800164DF4 /* hid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1A84931A19825DC800164DF4 /* hid.1 */; };
 		1A84932219825DFB00164DF4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84932119825DFB00164DF4 /* IOKit.framework */; };
+		8D2391171A23767D007F1DEB /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D2391161A23767D007F1DEB /* util.c */; };
 		8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEF19ED69260086FCAA /* hidmanager.m */; };
 		8D4A6EF319ED77370086FCAA /* list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF219ED77370086FCAA /* list.m */; };
 		8D4A6EF719EE7ABC0086FCAA /* setreport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEC19ED68570086FCAA /* setreport.m */; };
@@ -39,6 +40,8 @@
 		1A84931919825DC800164DF4 /* hid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hid-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		1A84931A19825DC800164DF4 /* hid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hid.1; sourceTree = "<group>"; };
 		1A84932119825DFB00164DF4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		8D2391151A237671007F1DEB /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		8D2391161A23767D007F1DEB /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		8D4A6EEC19ED68570086FCAA /* setreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setreport.m; sourceTree = "<group>"; };
 		8D4A6EEF19ED69260086FCAA /* hidmanager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hidmanager.m; sourceTree = "<group>"; };
 		8D4A6EF119ED69300086FCAA /* hidmanager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hidmanager.h; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 				8DBFE22E1A09345D00109CBA /* builtin */,
 				8DBFE2301A09345D00109CBA /* builtin.h */,
 				8DBFE2311A09345D00109CBA /* hid.c */,
+				8D2391151A237671007F1DEB /* util.h */,
+				8D2391161A23767D007F1DEB /* util.c */,
 			);
 			name = common;
 			path = ../common;
@@ -209,6 +214,7 @@
 				8D4A6EFD19EE8F540086FCAA /* info.m in Sources */,
 				8D4A6EF919EE83160086FCAA /* attached.m in Sources */,
 				8D4A6EFB19EE862A0086FCAA /* getreport.m in Sources */,
+				8D2391171A23767D007F1DEB /* util.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

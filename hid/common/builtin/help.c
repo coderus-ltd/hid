@@ -85,7 +85,6 @@ int cmd_help(int argc, const char **argv)
               "hid setreport allows you to send a report to an attached hid device.\n"
               "usage: hid setreport [--help] [-t output|feature] [-i <id>] [-w <time>] [-r] [-o] [-x] -d <data> [data...]\n"
               "\n"
-              "This command is a WIP and therefore is incomplete and may change.\n"
               "If more than one device is matched, the first-discovered matching device is used.\n"
               "\n"
               "Arguments:\n"

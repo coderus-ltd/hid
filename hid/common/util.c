@@ -45,7 +45,6 @@ void output_report(unsigned char * report, int reportLength, int argc, const cha
     reportLength--;
   }
   
-  // raw output
   if(outputAsHex)
   {
     char str[reportLength*3];

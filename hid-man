@@ -1,9 +1,0 @@
-.TH man 1 "07 November 2014" "1.0" "hid man page"
-.SH NAME
-hid \- interact with hid peripherals
-.SH SYNOPSIS
-hid <subcommand>
-.SH DESCRIPTION
-hid is a tool for interacting with hid peripherals.
-.SH OPTIONS
-See hid --help

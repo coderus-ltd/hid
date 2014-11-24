@@ -91,7 +91,6 @@ int cmd_setreport(int argc, const char **argv)
       [defaults registerDefaults:@{ @"i": @"0", @"w": @"0", @"t": @"output" }];
       
       // Parse the report data
-      // TODO: Allow reading from STDIN
       NSMutableArray *setReportCommands = [NSMutableArray arrayWithCapacity:1];
       
       if(!isatty(fileno(stdin)))

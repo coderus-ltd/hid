@@ -5,7 +5,9 @@
 //  Created by Eddie Woodley on 15/10/2014.
 //  Copyright (c) 2014 Coderus. All rights reserved.
 //
+
 #import "hidmanager.h"
+#import "util.h"
 
 int cmd_getreport(int argc, const char **argv)
 {
@@ -71,19 +73,7 @@ int cmd_getreport(int argc, const char **argv)
       }
       else
       {
-        char str[inputReportSize*3];
-        
-        unsigned char * pin = reportBuffer;
-        const char * hex = "0123456789ABCDEF";
-        char * pout = str;
-        for(; pin < reportBuffer+inputReportSize; pout+=3, pin++){
-          pout[0] = hex[(*pin>>4) & 0xF];
-          pout[1] = hex[ *pin     & 0xF];
-          pout[2] = ':';
-        }
-        pout[-1] = 0;
-        
-        printf("%s\n", str);
+        output_report(reportBuffer, (int)inputReportSize, argc, argv);
       }
       
     }

@@ -74,9 +74,15 @@ int cmd_help(int argc, const char **argv)
     {
       fprintf(stdout,
               "hid getreport allows you to get a report from an attached hid device.\n"
-              "usage: hid getreport [--help] [-t input|output|feature] [-i <report_id>]\n"
+              "usage: hid getreport [--help] [-t input|output|feature] [-i <report_id>] [-r] [-o] [-x]\n"
               "\n"
               "If more than one device is matched, the first-discovered matching device is used.\n"
+              "\n"
+              "    -t <type>  One of 'input', 'output' or 'feature' [default: input]\n"
+              "    -i <id>    Use the given report ID [default: 0]\n"
+              "    -r         Do not remove the report ID byte from the retreived report\n"
+              "    -o         Do not add a newline to the end of the retreived report\n"
+              "    -x         Output the report as human readable hex\n"
               );
     }
     else if(strcmp("setreport", cmd) == 0)

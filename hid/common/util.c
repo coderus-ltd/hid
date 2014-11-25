@@ -48,7 +48,6 @@ void output_report(unsigned char * report, int reportLength, int argc, const cha
   if(outputAsHex)
   {
     char str[reportLength*3];
-    
     unsigned char * pin = report;
     const char * hex = "0123456789ABCDEF";
     char * pout = str;
@@ -59,7 +58,7 @@ void output_report(unsigned char * report, int reportLength, int argc, const cha
     }
     pout[-1] = 0;
     
-    printf((addNewline)? "%s\n" : "%s", str);
+    printf("%s\n", str);
   }
   else
   {

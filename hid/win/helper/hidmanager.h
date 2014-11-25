@@ -5,7 +5,7 @@
 #ifndef HidManager_h
 #define HidManager_h
 
-typedef int(*ProcessDeviceBlock)(std::wstring);
+typedef int(*ProcessDeviceBlock)(std::wstring, bool*);
 
 class HidManager
 {

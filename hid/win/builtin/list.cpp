@@ -11,7 +11,7 @@ extern "C"
 static HidManager hid_manager;
 
 /* Methods */
-static int list_execution_block(std::wstring device)
+static int list_execution_block(std::wstring device, bool* foundDevice)
 {
     HANDLE handle = hid_manager.Create_Device_Handle(device);
     

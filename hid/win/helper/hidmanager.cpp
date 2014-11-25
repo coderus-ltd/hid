@@ -86,11 +86,12 @@ int HidManager::Process_Devices(int argc, const char **argv, ProcessDeviceBlock 
         nIndex++;
     }
 
+    bool stopLoop = false;
     if (foundDevices.size() > 0)
     {
-        for (int i = 0; i < foundDevices.size(); i++)
+        for (int i = 0; i < foundDevices.size() && !stopLoop; i++)
         {
-            execution_block(foundDevices[i]);
+            result = execution_block(foundDevices[i], &stopLoop);
         }
     }
 

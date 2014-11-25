@@ -10,9 +10,11 @@ extern "C"
 static HidManager hid_manager;
 
 /* Methods */
-static int info_execution_block(std::wstring device)
+static int info_execution_block(std::wstring device, bool* foundDevice)
 {
-    // should find the correct device first
+    // if not the right device
+    //*foundDevice = true;
+
     HANDLE handle = hid_manager.Create_Device_Handle(device);
 
     if (handle != 0 && handle != INVALID_HANDLE_VALUE)

@@ -12,9 +12,6 @@ static HidManager hid_manager;
 /* Methods */
 static int info_execution_block(std::wstring device, bool* foundDevice)
 {
-    // if not the right device
-    //*foundDevice = true;
-
     HANDLE handle = hid_manager.create_device_handle(device);
 
     if (handle != 0 && handle != INVALID_HANDLE_VALUE)

@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include "builtin.h"
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))

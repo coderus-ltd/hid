@@ -2,6 +2,8 @@
 #include<sstream>
 #include<iomanip>
 #include "hidmanager.h"
+#include "hiddevice.h"
+
 extern "C"
 {
     #include "builtin.h"
@@ -13,17 +15,18 @@ static HidManager hid_manager;
 /* Methods */
 static int list_execution_block(std::wstring device, bool* foundDevice)
 {
-    HANDLE handle = hid_manager.create_device_handle(device);
+    HidDevice hid_device(device);
+    HANDLE handle = hid_device.get_device_handle(device);
     
     if (handle != 0 && handle != INVALID_HANDLE_VALUE)
     {
-        HIDD_ATTRIBUTES attributes = hid_manager.get_device_attributes(handle);
+        HIDD_ATTRIBUTES attributes = hid_device.get_device_attributes(handle);
         
         std::wcout << "LID" << "\t";
         std::cout << hid_manager.number_to_hex_string(attributes.VendorID) << "\t";
         std::cout << hid_manager.number_to_hex_string(attributes.ProductID) << "\t";
 
-        std::wstring product = hid_manager.get_product_string(handle);
+        std::wstring product = hid_device.get_product_string(handle);
         if (product.empty())
         {
             std::wcout << hid_manager.clean_string(product) << std::endl;

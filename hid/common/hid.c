@@ -55,7 +55,10 @@ int main(int argc, const char * argv[])
   {
     if(strcmp("-n", argv[i]) == 0 && i+1 < argc)
     {
-      sscanf(argv[i+1], "%d", &iterations);
+#pragma warning( push )
+#pragma warning( disable : 4996)
+        sscanf(argv[i + 1], "%d", &iterations);
+#pragma warning( pop ) 
       if(iterations < 1)
       {
         iterations = 1;

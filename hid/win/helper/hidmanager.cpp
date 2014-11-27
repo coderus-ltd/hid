@@ -5,6 +5,7 @@
 #include<setupapi.h>
 
 #include "hidmanager.h"
+#include "commandparser.h"
 
 // Get the path to the device, used to create a device handle
 static std::wstring get_device_path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA oInterface)
@@ -35,50 +36,12 @@ static std::wstring get_device_path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA 
     return retvalue;
 }
 
-// Change a string to a wide string
-static std::wstring string_to_wide_string(const std::string& str)
-{
-    int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
-    std::wstring wstrTo(size_needed, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
-
-    return wstrTo;
-}
-
-// Get the data for the paramType (-v vid, -p pid)
-static std::wstring get_param(int argc, const char **argv, std::string paramType)
-{
-    const char* paramData = '\0';
-
-    for (int i = 0; i < argc; i++)
-    {
-        if (i + 1 != argc)
-        {
-            if (argv[i] == paramType)
-            {
-                paramData = argv[i + 1];
-                break;
-            }
-        }
-    }
-
-    if (paramData != '\0')
-    {
-        std::string ret(paramData);
-        return string_to_wide_string(ret);
-    }
-    else
-    {
-        return L"";
-    }
-}
-
 // Format is vid_0000&pid_0000
 static std::wstring get_search_string(int argc, const char **argv)
 {
     std::wstring ret;
-    std::wstring vid = get_param(argc, argv, "-v");
-    std::wstring pid = get_param(argc, argv, "-p");
+    std::wstring vid = get_w_param(argc, argv, "-v");
+    std::wstring pid = get_w_param(argc, argv, "-p");
 
     if (!vid.empty() && !pid.empty())
     {

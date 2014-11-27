@@ -87,12 +87,14 @@
     <ClCompile Include="builtin\info.cpp" />
     <ClCompile Include="builtin\list.cpp" />
     <ClCompile Include="builtin\setreport.cpp" />
+    <ClCompile Include="helper\commandparser.cpp" />
     <ClCompile Include="helper\hiddevice.cpp" />
     <ClCompile Include="helper\hidmanager.cpp" />
     <ClCompile Include="stdafx.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\builtin.h" />
+    <ClInclude Include="helper\commandparser.h" />
     <ClInclude Include="helper\hiddevice.h" />
     <ClInclude Include="helper\hidmanager.h" />
     <ClInclude Include="stdafx.h" />

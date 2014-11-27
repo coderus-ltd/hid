@@ -57,6 +57,9 @@
     <ClCompile Include="helper\hiddevice.cpp">
       <Filter>Source Files\helper</Filter>
     </ClCompile>
+    <ClCompile Include="helper\commandparser.cpp">
+      <Filter>Source Files\helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\builtin.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="helper\hiddevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\commandparser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,12 +19,21 @@ static int list_execution_block(std::wstring device, bool* foundDevice)
     {
         HIDD_ATTRIBUTES attributes = hid_manager.get_device_attributes(handle);
         
-        std::cout << "Locn\t";
+        std::wcout << "LID" << "\t";
         std::cout << hid_manager.number_to_hex_string(attributes.VendorID) << "\t";
         std::cout << hid_manager.number_to_hex_string(attributes.ProductID) << "\t";
 
         std::wstring product = hid_manager.get_product_string(handle);
-        std::wcout << hid_manager.clean_string(product) << std::endl;
+        if (product.empty())
+        {
+            std::wcout << hid_manager.clean_string(product) << std::endl;
+        }
+        else
+        {
+            // If we were to support Bluetooth or another type of HID device this could be changed
+            // to include that device type instead of hard coded USB
+            std::wcout << hid_manager.clean_string(product) << " via USB" << std::endl;
+        }
 
         CloseHandle(handle);
     }

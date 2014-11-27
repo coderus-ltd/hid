@@ -6,7 +6,6 @@ extern "C"
 }
 
 /* Members */
-static HidManager hid_manager;
 static bool deviceAttached;
 
 /* Methods */
@@ -20,9 +19,10 @@ int cmd_attached(int argc, const char**argv)
 {
     deviceAttached = false;
 
+    HidManager hid_manager;
     int ret = hid_manager.process_devices(argc, argv, &attached_execution_block);
 
-    if (deviceAttached == 0)
+    if (!deviceAttached)
         std::cout << 0;
     else
         std::cout << 1;

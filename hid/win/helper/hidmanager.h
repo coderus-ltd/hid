@@ -13,15 +13,15 @@ public:
     HidManager();
     ~HidManager();
 
-    int Process_Devices(int argc, const char **argv, ProcessDeviceBlock);
+    int process_devices(int argc, const char **argv, ProcessDeviceBlock);
 
-    HANDLE Create_Device_Handle(std::wstring);
-    HIDD_ATTRIBUTES Get_Device_Attributes(HANDLE);
-    HIDP_CAPS Get_Device_Capabilities(HANDLE);
-    HIDP_VALUE_CAPS Get_Device_Capability_Values(HANDLE, HIDP_REPORT_TYPE, PUSHORT);
-    std::wstring Get_Manufacturer_String(HANDLE);
-    std::wstring Get_Product_String(HANDLE);
-    std::wstring Get_Serial_String(HANDLE);
+    HANDLE create_device_handle(std::wstring);
+    HIDD_ATTRIBUTES get_device_attributes(HANDLE);
+    HIDP_CAPS get_device_capabilities(HANDLE);
+    HIDP_VALUE_CAPS get_device_capability_values(HANDLE, HIDP_REPORT_TYPE, PUSHORT);
+    std::wstring get_manufacturer_string(HANDLE);
+    std::wstring get_product_string(HANDLE);
+    std::wstring get_serial_string(HANDLE);
 
     template< typename T >
     std::string number_to_hex_string(T i)

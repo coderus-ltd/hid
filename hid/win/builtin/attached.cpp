@@ -20,7 +20,7 @@ int cmd_attached(int argc, const char**argv)
 {
     deviceAttached = false;
 
-    int ret = hid_manager.Process_Devices(argc, argv, &attached_execution_block);
+    int ret = hid_manager.process_devices(argc, argv, &attached_execution_block);
 
     if (deviceAttached == 0)
         std::cout << 0;

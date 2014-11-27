@@ -7,7 +7,7 @@
 #include "hidmanager.h"
 
 // Get the path to the device, used to create a device handle
-static std::wstring Get_Device_Path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA oInterface)
+static std::wstring get_device_path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA oInterface)
 {
     std::wstring retvalue;
     DWORD nRequiredSize = 0;
@@ -36,7 +36,7 @@ static std::wstring Get_Device_Path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA 
 }
 
 // Find where null termination occurs in the buffer
-static int Find_Null_Termination(unsigned char buffer[], std::wstring searchString)
+static int find_null_termination(unsigned char buffer[], std::wstring searchString)
 {
     int retvalue = 0;
     for (unsigned int i = 0; i < searchString.length(); i++)
@@ -51,7 +51,7 @@ static int Find_Null_Termination(unsigned char buffer[], std::wstring searchStri
 }
 
 // Change a string to a wide string
-static std::wstring String_To_Wide_String(const std::string& str)
+static std::wstring string_to_wide_string(const std::string& str)
 {
     int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
     std::wstring wstrTo(size_needed, 0);
@@ -61,7 +61,7 @@ static std::wstring String_To_Wide_String(const std::string& str)
 }
 
 // Get the data for the paramType (-v vid, -p pid)
-static std::wstring Get_Param(int argc, const char **argv, std::string paramType)
+static std::wstring get_param(int argc, const char **argv, std::string paramType)
 {
     const char* paramData = '\0';
 
@@ -80,7 +80,7 @@ static std::wstring Get_Param(int argc, const char **argv, std::string paramType
     if (paramData != '\0')
     {
         std::string ret(paramData);
-        return String_To_Wide_String(ret);
+        return string_to_wide_string(ret);
     }
     else
     {
@@ -89,11 +89,11 @@ static std::wstring Get_Param(int argc, const char **argv, std::string paramType
 }
 
 // Format is vid_0000&pid_0000
-static std::wstring Get_Search_String(int argc, const char **argv)
+static std::wstring get_search_string(int argc, const char **argv)
 {
     std::wstring ret;
-    std::wstring vid = Get_Param(argc, argv, "-v");
-    std::wstring pid = Get_Param(argc, argv, "-p");
+    std::wstring vid = get_param(argc, argv, "-v");
+    std::wstring pid = get_param(argc, argv, "-p");
 
     if (!vid.empty() && !pid.empty())
     {
@@ -112,7 +112,7 @@ static std::wstring Get_Search_String(int argc, const char **argv)
 }
 
 // Compare the devicePath and searchLocation strings to see if we should include it in the found devices
-static bool Compare_Path_And_Search_Location(std::wstring devicePath, std::wstring searchLocation)
+static bool compare_path_and_search_location(std::wstring devicePath, std::wstring searchLocation)
 {
     bool ret;
     if (devicePath.empty())
@@ -141,7 +141,7 @@ HidManager::~HidManager()
     // Nothing yet
 }
 
-int HidManager::Process_Devices(int argc, const char **argv, ProcessDeviceBlock execution_block)
+int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock execution_block)
 {
     GUID guid;
     HidD_GetHidGuid(&guid);
@@ -153,7 +153,7 @@ int HidManager::Process_Devices(int argc, const char **argv, ProcessDeviceBlock 
     int result = 0;
     int nIndex = 0;
 
-    std::wstring searchString = Get_Search_String(argc, argv);
+    std::wstring searchString = get_search_string(argc, argv);
     std::vector<std::wstring> foundDevices;
 
     SP_DEVICE_INTERFACE_DATA oInterface;
@@ -161,8 +161,8 @@ int HidManager::Process_Devices(int argc, const char **argv, ProcessDeviceBlock 
 
     while (SetupDiEnumDeviceInterfaces(hInfoSet, NULL, &guid, nIndex, &oInterface))
     {
-        std::wstring strDevicePath = Get_Device_Path(hInfoSet, oInterface);
-        if (Compare_Path_And_Search_Location(strDevicePath, searchString))
+        std::wstring strDevicePath = get_device_path(hInfoSet, oInterface);
+        if (compare_path_and_search_location(strDevicePath, searchString))
         {
             foundDevices.push_back(strDevicePath);
         }
@@ -183,7 +183,7 @@ int HidManager::Process_Devices(int argc, const char **argv, ProcessDeviceBlock 
     return result;
 };
 
-HANDLE HidManager::Create_Device_Handle(std::wstring devicePath)
+HANDLE HidManager::create_device_handle(std::wstring devicePath)
 {
     HANDLE handle = CreateFile(
         devicePath.c_str(),
@@ -197,7 +197,7 @@ HANDLE HidManager::Create_Device_Handle(std::wstring devicePath)
     return handle;
 }
 
-HIDD_ATTRIBUTES HidManager::Get_Device_Attributes(HANDLE handle)
+HIDD_ATTRIBUTES HidManager::get_device_attributes(HANDLE handle)
 {
     HIDD_ATTRIBUTES attributes;
     attributes.Size = sizeof(attributes);
@@ -206,7 +206,7 @@ HIDD_ATTRIBUTES HidManager::Get_Device_Attributes(HANDLE handle)
     return attributes;
 }
 
-HIDP_CAPS HidManager::Get_Device_Capabilities(HANDLE handle)
+HIDP_CAPS HidManager::get_device_capabilities(HANDLE handle)
 {
     PHIDP_PREPARSED_DATA ppData;
     HIDP_CAPS capabilities;
@@ -218,7 +218,7 @@ HIDP_CAPS HidManager::Get_Device_Capabilities(HANDLE handle)
     return capabilities;
 }
 
-HIDP_VALUE_CAPS HidManager::Get_Device_Capability_Values(HANDLE handle, HIDP_REPORT_TYPE report_type, PUSHORT report_length)
+HIDP_VALUE_CAPS HidManager::get_device_capability_values(HANDLE handle, HIDP_REPORT_TYPE report_type, PUSHORT report_length)
 {
     PHIDP_PREPARSED_DATA ppData;
     HIDP_VALUE_CAPS capabilities;
@@ -230,35 +230,35 @@ HIDP_VALUE_CAPS HidManager::Get_Device_Capability_Values(HANDLE handle, HIDP_REP
     return capabilities;
 }
 
-std::wstring HidManager::Get_Manufacturer_String(HANDLE handle)
+std::wstring HidManager::get_manufacturer_string(HANDLE handle)
 {
     unsigned char buffer[126];
     HidD_GetManufacturerString(handle, &buffer, 126);
 
     std::wstring buf(buffer, buffer + sizeof buffer / sizeof buffer[0]);
-    std::wstring ret = buf.substr(0, Find_Null_Termination(buffer, buf));
+    std::wstring ret = buf.substr(0, find_null_termination(buffer, buf));
 
     return ret;
 }
 
-std::wstring HidManager::Get_Product_String(HANDLE handle)
+std::wstring HidManager::get_product_string(HANDLE handle)
 {
     unsigned char buffer[126];
     HidD_GetProductString(handle, &buffer, 126);
 
     std::wstring buf(buffer, buffer + sizeof buffer / sizeof buffer[0]);
-    std::wstring ret = buf.substr(0, Find_Null_Termination(buffer, buf));
+    std::wstring ret = buf.substr(0, find_null_termination(buffer, buf));
 
     return ret;
 }
 
-std::wstring HidManager::Get_Serial_String(HANDLE handle)
+std::wstring HidManager::get_serial_string(HANDLE handle)
 {
     unsigned char buffer[126];
     HidD_GetSerialNumberString(handle, &buffer, 126);
 
     std::wstring buf(buffer, buffer + sizeof buffer / sizeof buffer[0]);
-    std::wstring ret = buf.substr(0, Find_Null_Termination(buffer, buf));
+    std::wstring ret = buf.substr(0, find_null_termination(buffer, buf));
 
     return ret;
 }

@@ -130,16 +130,3 @@ int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock 
     SetupDiDestroyDeviceInfoList(hInfoSet);
     return result;
 };
-
-std::wstring HidManager::clean_string(std::wstring old_string)
-{
-    std::wstring ret;
-    for (unsigned int i = 0; i < old_string.length(); i++)
-    {
-        if (old_string[i] != '\0')
-        {
-            ret.push_back(old_string[i]);
-        }
-    }
-    return ret;
-}

@@ -118,3 +118,16 @@ std::wstring HidDevice::get_serial_string(HANDLE handle)
 
     return ret;
 }
+
+std::wstring HidDevice::clean_string(std::wstring old_string)
+{
+    std::wstring ret;
+    for (unsigned int i = 0; i < old_string.length(); i++)
+    {
+        if (old_string[i] != '\0')
+        {
+            ret.push_back(old_string[i]);
+        }
+    }
+    return ret;
+}

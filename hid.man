@@ -1,0 +1,87 @@
+NAME
+  hid - interact with attached HID-compliant devices.
+SYNOPSIS
+  hid [--help] <command> [args]
+DESCRIPTION
+  hid is a tool to send commands to an attached HID-compliant device. 
+
+  hid can also list all attached USB devices.
+
+BASIC COMMANDS
+    list       List attached HID devices
+    info       List information on attached hid devices
+    getreport  Get a report from an attached device
+    setreport  Set a report for an attached device
+    attached   Check whether a matching device is attached or not
+
+GENERAL OPTIONS
+    -n <int>    Run the given command <int> times [default: 1]
+
+FILTERING DEVICES
+
+  Arguments can be provided to filter the devices to run the command against.
+  example: hid list -v 0x19b5
+
+    -l <hex>   Filter by the given location ID
+    -v <hex>   Filter by the given vendor ID
+    -p <hex>   Filter by the given product ID
+
+  See 'hid help <command>' for more information on a specific command.
+
+COMMANDS 
+
+  list  [-vlp arg]
+
+      List attached HID-compliant devices
+
+  info  [-vlp arg]
+
+      View information about attached HID-compliant devices.
+
+  getreport  [-t input|output|feature] [-i <report_id>] [-r] [-o] [-x]
+
+      Get a report from an attached HID-compliant device.
+
+      If more than one device is matched, the first-discovered matching device is used.
+
+      -t <type>  One of 'input', 'output' or 'feature' [default: input]
+      -i <id>    Use the given report ID [default: 0]
+      -r         Do not remove the report ID byte from the retreived report
+      -o         Do not add a newline to the end of the retreived report
+      -x         Output the report as human readable hex
+
+  setreport  [-t output|feature] [-i <id>] [-w <time>] [-r] [-o] [-x] -d <data> [data...]
+
+      Send a report to an attached HID-compliant device.
+
+      If more than one device is matched, the first-discovered matching device is used.
+
+      -d <data>  The data of the report, as hex (prefix with 0x) or as a string.
+                 Multiple data sets can be passed, space separated, and will be set in order.
+                 Report data can also be piped over STDIN, multiple reports are not supported
+                 in this case
+      -t <type>  One of 'output' or 'feature' [default: output]
+      -i <id>    Use the given report ID [default: 0]
+      -w <time>  If provided, the command will wait for an input report for the
+                 given number of seconds
+      -r         Do not remove the report ID byte from any received input reports
+      -o         Do not add a newline to the end of any received input reports
+      -x         Output any received input reports as human readable hex
+
+      For information on specifying a device, see 'hid --help'.
+
+  attached  [-vlp arg]
+
+      Determine if a matching HID-compliant is attached.
+
+      Wwill output '1' if a matching device is attached, otherwise '0'.
+
+OPTIONS
+  --help      Displays help.
+  
+EXAMPLE
+      $ hid list
+BUGS
+    See: https://github.com/coderus-ltd/hid/issues
+AUTHOR
+  Coderus Ltd <info@coderus.com>

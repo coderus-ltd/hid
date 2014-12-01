@@ -1,4 +1,6 @@
 #include<string>
+#include<sstream>
+#include<iomanip>
 #include<windows.h>
 #include<hidsdi.h>
 
@@ -39,13 +41,14 @@ public:
 
     // Clean the string to show in the console
     std::wstring clean_string(std::wstring old_string);
-
+    
     template< typename T >
     std::string number_to_hex_string(T i)
     {
         std::stringstream stream;
         stream << "0x"
-            << std::setfill('0') << std::setw(sizeof(T) * 2)
+            << std::setfill('0') 
+            << std::setw(sizeof(T) * 2)
             << std::hex << i;
         return stream.str();
     }

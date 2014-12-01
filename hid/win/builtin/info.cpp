@@ -21,6 +21,23 @@ static int info_execution_block(std::wstring device, bool* foundDevice)
         std::wstring product = hid_device.get_product_string(handle);
         std::wstring serial = hid_device.get_serial_string(handle);
 
+        std::cout  << "================================================================" << std::endl;
+        // USB should be modified to be other types should they become supported
+        std::wcout << hid_device.clean_string(product) << " via " << "USB" << std::endl;
+        std::cout  << "================================================================" << std::endl;
+        std::cout  << "VendorID: " << hid_device.number_to_hex_string(attributes.VendorID) << std::endl;
+        std::cout  << "ProductID: " << hid_device.number_to_hex_string(attributes.ProductID) << std::endl;
+        std::cout  << "VersionNumber: " << attributes.VersionNumber << std::endl;
+        std::wcout << "Manufacturer: " << hid_device.clean_string(manufacturer) << std::endl;
+        std::wcout << "Product: " << hid_device.clean_string(product) << std::endl;
+        std::wcout << "SerialNumber: " << serial << std::endl;
+        std::wcout << "LocationID: " << hid_device.get_device_path() << std::endl;
+        std::cout  << "PrimaryUsagePage: " << hid_device.number_to_hex_string(capabilities.UsagePage) << std::endl;
+        std::cout  << "PrimaryUsage: " << capabilities.Usage << std::endl;
+        std::cout  << "MaxInputReportSize: " << capabilities.InputReportByteLength << std::endl;
+        std::cout  << "MaxOutputReportSize: " << capabilities.OutputReportByteLength << std::endl;
+        std::cout  << "MaxFeatureReportSize: " << capabilities.FeatureReportByteLength << std::endl;
+
         CloseHandle(handle);
     }
 

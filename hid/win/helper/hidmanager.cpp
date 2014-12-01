@@ -1,5 +1,4 @@
 #include<string>
-#include<sstream>
 #include<vector>
 #include<windows.h>
 #include<setupapi.h>

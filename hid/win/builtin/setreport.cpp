@@ -15,10 +15,7 @@ extern "C"
 static int waitTime = 0;
 static std::vector<std::wstring> commands;
 
-static int readReport(std::wstring device) {
-	HidDevice hid_device(device);
-	HANDLE handle = hid_device.get_device_handle(device);
-
+static int readReport(HANDLE& handle, HidDevice hid_device) {
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
 	{
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
@@ -82,7 +79,7 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 			//prepare report data	
 			char* reportData = new char[reportDataSize];
 
-			// Conversion
+			// conversion
 			size_t i;
 			wcstombs_s(&i, reportData, reportDataSize, command.c_str(), reportDataSize);
 
@@ -97,7 +94,7 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 
 			// send the report
 			if (HidD_SetOutputReport(handle, reportBuffer, sendingReportSize)) {
-				readReport(device); //read report
+				readReport(handle, hid_device); //read report
 			} else {
 				std::cout << "setreport: send error (code: " << GetLastError() << ")" << std::endl;
 			}
@@ -138,12 +135,11 @@ int cmd_setreport(int argc, const char **argv)
 			}
 		}
 	} else { //stdin is a file or a pipe
-		const int size = 255;
-		std::vector<char> buf(size);
-		std::cin.read(buf.data(), buf.size());
-		if (!buf.empty()) {
-			std::wstring str(buf.begin(), buf.end());
-			commands.push_back(str);
+		std::string inputStr;
+		std::cin >> inputStr;
+		std::wstring input(inputStr.begin(), inputStr.end());
+		if (!input.empty()) {
+			commands.push_back(input);
 		}
 	}
 	

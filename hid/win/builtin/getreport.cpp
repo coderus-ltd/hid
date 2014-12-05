@@ -21,7 +21,7 @@ static int getreport_execution_block(std::wstring device, bool* foundDevice)
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
 
 		//prepare the report
-		const int reportDataSize = caps.OutputReportByteLength;
+		const size_t reportDataSize = caps.OutputReportByteLength;
 		char* reportData = new char[reportDataSize];
 
 		// set report id

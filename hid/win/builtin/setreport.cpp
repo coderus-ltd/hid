@@ -23,30 +23,40 @@ static int readReport(std::wstring device) {
 	{
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
 
-		const int outputBufferSize = caps.OutputReportByteLength;
+		const size_t outputBufferSize = caps.OutputReportByteLength;
 		char* outputBuffer = new char[outputBufferSize];
+
 		DWORD dwRead = 0;
-		/*
-		// also needs new params on the CreateFile (overlap flag, etc)
-		OVERLAPPED overlap = { 0 };
+		BOOL res;
+		OVERLAPPED overlap = {};
 		overlap.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-		*/
+		HANDLE ev = overlap.hEvent;
 
-		int rf = ReadFile(handle, outputBuffer, outputBufferSize, &dwRead, NULL /* &overlap*/);
-		if (!rf && GetLastError() != ERROR_IO_PENDING) {
-			std::cout << "sendreport: read error (code: " << GetLastError() << ")" << std::endl;
-		} else {
-			/*
-			WaitForSingleObject(&(overlap.hEvent), waitTime * 1000);
-			*/
-
-			//format buffer (remove initial position)
-			const int formatedBufferSize = outputBufferSize - 1;
-			char* formatedBuffer = new char[formatedBufferSize];
-			strncpy_s(formatedBuffer, formatedBufferSize, &outputBuffer[1], formatedBufferSize);
-
-			std::cout << formatedBuffer << std::endl;
+		if (!ReadFile(handle, outputBuffer, outputBufferSize, &dwRead, &overlap)) {
+			if (GetLastError() != ERROR_IO_PENDING) {
+				std::cout << "not io pending" << std::endl;
+				CloseHandle(ev);
+				return 0;
+			}
 		}
+
+		if (waitTime >= 0) {		
+			res = WaitForSingleObject(ev, waitTime * 1000);
+			if (res != WAIT_OBJECT_0) {
+				CloseHandle(ev);
+				return 0;
+			}
+		}
+
+		res = GetOverlappedResult(handle, &overlap, &dwRead, TRUE);
+		if (res && dwRead > 0) {
+			//get overlapped data
+			char* data = new char[outputBufferSize];
+			memcpy(data, &outputBuffer[1], (size_t)(outputBufferSize > dwRead ? dwRead : outputBufferSize));
+			std::cout << data << std::endl;
+		}
+
+		CloseHandle(ev);
 	}
 
 	return 0;
@@ -62,8 +72,8 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
 	{
 		for (std::wstring command : commands) {
-			const int reportDataSize = command.size() + 1; //+1 - termination character (\0)
-			const int sendingReportSize = caps.OutputReportByteLength;
+			const size_t reportDataSize = command.size() + 1; //+1 - termination character (\0)
+			const size_t sendingReportSize = caps.OutputReportByteLength;
 
 			if (reportDataSize > sendingReportSize) {
 				std::cout << "warn: report larger than maximum size" << std::endl;
@@ -145,7 +155,7 @@ int cmd_setreport(int argc, const char **argv)
 	std::wstring _waitTime = get_w_param(argc, argv, "-w");
 	if (!_waitTime.empty()) {
 		int wt = std::stoi(_waitTime);
-		waitTime = wt > 1 ? wt : 1;
+		waitTime = wt > 0 ? wt : 0;
 	}
 
 	HidManager hid_manager;

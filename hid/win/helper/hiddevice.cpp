@@ -42,7 +42,7 @@ HANDLE HidDevice::get_device_handle(std::wstring devicePath)
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         0,
         OPEN_EXISTING,
-        0,
+		FILE_FLAG_OVERLAPPED,
         0);
 
     return handle;

@@ -22,7 +22,7 @@ static int getreport_execution_block(std::wstring device, bool* foundDevice)
 
 		//prepare the report
 		const int reportDataSize = caps.OutputReportByteLength;
-		char* reportData = (char*)malloc(reportDataSize * sizeof(char));
+		char* reportData = new char[reportDataSize];
 
 		// set report id
 		reportData[0] = 0x01;

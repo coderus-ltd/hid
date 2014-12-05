@@ -24,7 +24,7 @@ static int readReport(std::wstring device) {
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
 
 		const int outputBufferSize = caps.OutputReportByteLength;
-		char *outputBuffer = (char*)malloc(outputBufferSize * sizeof(char));
+		char* outputBuffer = new char[outputBufferSize];
 		DWORD dwRead = 0;
 		/*
 		// also needs new params on the CreateFile (overlap flag, etc)
@@ -42,12 +42,8 @@ static int readReport(std::wstring device) {
 
 			//format buffer (remove initial position)
 			const int formatedBufferSize = outputBufferSize - 1;
-			char *formatedBuffer = (char*)malloc(formatedBufferSize * sizeof(char));
-
-#pragma warning( push )
-#pragma warning( disable : 4996)
-			strncpy(formatedBuffer, &outputBuffer[1], formatedBufferSize);
-#pragma warning( pop ) 
+			char* formatedBuffer = new char[formatedBufferSize];
+			strncpy_s(formatedBuffer, formatedBufferSize, &outputBuffer[1], formatedBufferSize);
 
 			std::cout << formatedBuffer << std::endl;
 		}
@@ -74,24 +70,20 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 			}
 
 			//prepare report data	
-			char* reportData = (char*)malloc(reportDataSize * sizeof(char));
+			char* reportData = new char[reportDataSize];
 
-#pragma warning( push )
-#pragma warning( disable : 4996)
-			wcstombs(reportData, command.c_str(), reportDataSize);
-#pragma warning( pop ) 
+			// Conversion
+			size_t i;
+			wcstombs_s(&i, reportData, reportDataSize, command.c_str(), reportDataSize);
 
 			//prepare report
-			char* reportBuffer = (char*)malloc(sendingReportSize * sizeof(char));
+			char* reportBuffer = new char[sendingReportSize];
 
 			// set report id
 			reportBuffer[0] = 0x01;
 
-#pragma warning( push )
-#pragma warning( disable : 4996)
 			// copy data into the report buffer
-			strncpy(&reportBuffer[1], reportData, sendingReportSize);
-#pragma warning( pop ) 
+			strncpy_s(&reportBuffer[1], sendingReportSize, reportData, sendingReportSize);
 
 			// send the report
 			if (HidD_SetOutputReport(handle, reportBuffer, sendingReportSize)) {
@@ -109,10 +101,7 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 
 int cmd_setreport(int argc, const char **argv)
 {
-#pragma warning( push )
-#pragma warning( disable : 4996)
-	if (isatty(fileno(stdin))) { //stdin is a terminal
-#pragma warning( pop ) 
+	if (_isatty(_fileno(stdin))) { //stdin is a terminal
 		//lookup -d
 		for (int i = 1; i < argc; i++) {
 			if (strcmp(argv[i], "-d") == 0)

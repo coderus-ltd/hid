@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Coderus\hid\hid\win\helper;C:\Coderus\hid\hid\win\builtin;C:\Coderus\hid\hid\common;$(IncludePath)</IncludePath>
+    <IncludePath>\\vmware-host\Shared Folders\hid\hid\common;\\vmware-host\Shared Folders\hid\hid\win\helper;\\vmware-host\Shared Folders\hid\hid\win\builtin;C:\Coderus\hid\hid\win\helper;C:\Coderus\hid\hid\win\builtin;C:\Coderus\hid\hid\common;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

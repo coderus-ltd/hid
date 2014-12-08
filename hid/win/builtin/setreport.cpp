@@ -16,7 +16,7 @@ extern "C"
 static int waitTime = 0;
 static std::vector<std::wstring> commands;
 
-static char* readData(HANDLE& handle, HidDevice hid_device, bool waitForData) {
+static char* readData(HANDLE& handle, HidDevice hid_device) {
 	char* data = NULL;
 
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
@@ -72,7 +72,7 @@ static int readReportData(HANDLE& handle, HidDevice hid_device) {
 			break;
 		}
 
-		char* data = readData(handle, hid_device, dataValues.size() == 0 || dataValues.size() == 1);
+		char* data = readData(handle, hid_device);
 		if (data == NULL) { //no more data
 			break;
 		}

@@ -37,7 +37,7 @@ static int readReport(HANDLE& handle, HidDevice hid_device) {
 			}
 		}
 
-		if (waitTime >= 0) {		
+		if (waitTime > 0) {		
 			res = WaitForSingleObject(ev, waitTime * 1000);
 			if (res != WAIT_OBJECT_0) {
 				CloseHandle(ev);
@@ -50,7 +50,7 @@ static int readReport(HANDLE& handle, HidDevice hid_device) {
 			//get overlapped data
 			char* data = new char[outputBufferSize];
 			memcpy(data, &outputBuffer[1], (size_t)(outputBufferSize > dwRead ? dwRead : outputBufferSize));
-			std::cout << data << std::endl;
+			std::cout << data;
 		}
 
 		CloseHandle(ev);

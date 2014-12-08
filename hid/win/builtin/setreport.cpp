@@ -18,6 +18,7 @@ static std::vector<std::wstring> commands;
 
 static char* readData(HANDLE& handle, HidDevice hid_device, bool waitForData) {
 	char* data = NULL;
+
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
 	{
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
@@ -74,7 +75,9 @@ static int readReportData(HANDLE& handle, HidDevice hid_device) {
 		char* data = readData(handle, hid_device, dataValues.size() == 0 || dataValues.size() == 1);
 		if (data == NULL) { //no more data
 			break;
-		} else { //got data
+		}
+		else 
+		{ //got data
 			dataValues.push_back(data);
 			if (dataValues.size() == 20) {
 				break;
@@ -126,7 +129,9 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 			// send the report
 			if (HidD_SetOutputReport(handle, reportBuffer, sendingReportSize)) {
 				readReportData(handle, hid_device); //read report
-			} else {
+			}
+			else
+			{
 				std::cout << "setreport: send error (code: " << GetLastError() << ")" << std::endl;
 			}
 		}
@@ -154,10 +159,11 @@ int cmd_setreport(int argc, const char **argv)
 					//parse commands
 					const char* str = argv[j];
 					std::wstring data(str, str + strlen(str));
-					if (data.length() % 2 == 0 && data.substr(0, 2) == L"0x") {
+					if (data.length() % 2 == 0 && data.find(L"0x") == 0) {
 						commands.push_back(data.substr(2, data.length()));
 					}
-					else {
+					else 
+					{
 						commands.push_back(data);
 					}
 				}
@@ -165,7 +171,9 @@ int cmd_setreport(int argc, const char **argv)
 				break;
 			}
 		}
-	} else { //stdin is a file or a pipe
+	}
+	else 
+	{ //stdin is a file or a pipe
 		std::string inputStr;
 		std::cin >> inputStr;
 		std::wstring input(inputStr.begin(), inputStr.end());

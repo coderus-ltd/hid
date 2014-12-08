@@ -39,8 +39,10 @@ static std::wstring get_device_path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA 
 static std::wstring get_search_string(int argc, const char **argv)
 {
     std::wstring ret;
-    std::wstring vid = get_w_param(argc, argv, "-v");
-    std::wstring pid = get_w_param(argc, argv, "-p");
+	std::wstring rawVid = get_w_param(argc, argv, "-v");
+	std::wstring rawPid = get_w_param(argc, argv, "-p");
+	std::wstring vid = rawVid.find(L"0x") == 0 ? rawVid.substr(2, rawVid.length()) : rawVid;
+	std::wstring pid = rawPid.find(L"0x") == 0 ? rawPid.substr(2, rawPid.length()) : rawPid;
 
     if (!vid.empty() && !pid.empty())
     {

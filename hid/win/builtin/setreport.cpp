@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <io.h>
 #include <vector>
+#include <time.h>
 
 extern "C"
 {
@@ -15,12 +16,13 @@ extern "C"
 static int waitTime = 0;
 static std::vector<std::wstring> commands;
 
-static int readReport(HANDLE& handle, HidDevice hid_device) {
+static char* readData(HANDLE& handle, HidDevice hid_device, bool waitForData) {
+	char* data = NULL;
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
 	{
 		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
-
 		const size_t outputBufferSize = caps.OutputReportByteLength;
+
 		char* outputBuffer = new char[outputBufferSize];
 
 		DWORD dwRead = 0;
@@ -37,23 +39,52 @@ static int readReport(HANDLE& handle, HidDevice hid_device) {
 			}
 		}
 
-		if (waitTime > 0) {		
-			res = WaitForSingleObject(ev, waitTime * 1000);
-			if (res != WAIT_OBJECT_0) {
-				CloseHandle(ev);
-				return 0;
-			}
+		res = WaitForSingleObject(ev, waitTime == 0 ? 100 : waitTime * 1000);
+		if (res != WAIT_OBJECT_0) {
+			CloseHandle(ev);
+			return 0;
 		}
 
 		res = GetOverlappedResult(handle, &overlap, &dwRead, TRUE);
 		if (res && dwRead > 0) {
-			//get overlapped data
-			char* data = new char[outputBufferSize];
+			data = new char[outputBufferSize];
 			memcpy(data, &outputBuffer[1], (size_t)(outputBufferSize > dwRead ? dwRead : outputBufferSize));
-			std::cout << data;
 		}
 
 		CloseHandle(ev);
+	}
+
+	return data;
+}
+
+static int readReportData(HANDLE& handle, HidDevice hid_device) {
+	unsigned long seconds = waitTime;
+	unsigned long beginTime;
+	static std::vector<char*> dataValues;
+
+	//start clock
+	beginTime = clock();
+	while (true) {
+		//compute elapsed time
+		unsigned long elapsedTime = ((unsigned long)clock() - beginTime) / CLOCKS_PER_SEC;
+		if (elapsedTime > seconds) {
+			break;
+		}
+
+		char* data = readData(handle, hid_device, dataValues.size() == 0 || dataValues.size() == 1);
+		if (data == NULL) { //no more data
+			break;
+		} else { //got data
+			dataValues.push_back(data);
+			if (dataValues.size() == 20) {
+				break;
+			}
+		}
+	}
+
+	bool lineBreak = dataValues.size() > 1;
+	for (char* dataValue : dataValues) {
+		lineBreak ? std::cout << dataValue << std::endl : std::cout << dataValue;
 	}
 
 	return 0;
@@ -94,7 +125,7 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 
 			// send the report
 			if (HidD_SetOutputReport(handle, reportBuffer, sendingReportSize)) {
-				readReport(handle, hid_device); //read report
+				readReportData(handle, hid_device); //read report
 			} else {
 				std::cout << "setreport: send error (code: " << GetLastError() << ")" << std::endl;
 			}
@@ -144,7 +175,6 @@ int cmd_setreport(int argc, const char **argv)
 	}
 	
 	if (commands.size() == 0) {
-		std::cout << 0 << std::endl;
 		return 0;
 	}
 	

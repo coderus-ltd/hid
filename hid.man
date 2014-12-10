@@ -78,7 +78,8 @@ COMMANDS
 
 OPTIONS
   --help      Displays help.
-  
+  --version   Displays hid tool version information.
+
 EXAMPLE
       $ hid list
 BUGS

@@ -37,3 +37,8 @@ hid can return the following exit codes:
 
 ### License
 MIT
+
+### Generate man page
+`brew install txt2man`
+`cat hid.man | txt2man -t hid > hid.1`
+`cat hid.man | txt2man -t hid -T` to preview the man page

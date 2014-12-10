@@ -26,6 +26,7 @@ struct cmd_struct
 static struct cmd_struct commands[] =
 {
   { "help", cmd_help, 0 },
+  { "version", cmd_version, 0 },
   { "list", cmd_list, 0 },
   { "info", cmd_info, 0 },
   { "getreport", cmd_getreport, 0 },
@@ -72,6 +73,13 @@ int main(int argc, const char * argv[])
     // Read subcommand
     const char *cmd = argv[0];
     
+    // Map --version to version subcommand, adjust argv as needed
+    if(strcmp("--version", argv[argc-1]) == 0)
+    {
+      argv[1] = argv[0];
+      argv[0] = cmd = "version";
+    }
+      
     // Map --help to help subcommand, adjust argv as needed
     if(strcmp("--help", argv[argc-1]) == 0)
     {

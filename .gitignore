@@ -1,3 +1,5 @@
+hid/common/version.h
+
 # Created by http://www.gitignore.io
 
 ### OSX ###
@@ -22,9 +24,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-
-#!! ERROR:  is undefined. Use list command to see defined gitignore types !!#
 
 ### Xcode ###
 build/

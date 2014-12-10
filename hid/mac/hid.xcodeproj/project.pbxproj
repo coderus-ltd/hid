@@ -10,6 +10,7 @@
 		1A84931419825DC800164DF4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84931319825DC800164DF4 /* Foundation.framework */; };
 		1A84931B19825DC800164DF4 /* hid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1A84931A19825DC800164DF4 /* hid.1 */; };
 		1A84932219825DFB00164DF4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A84932119825DFB00164DF4 /* IOKit.framework */; };
+		8D083B251A3850C40043EDF0 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D083B241A3850C40043EDF0 /* version.c */; };
 		8D2391171A23767D007F1DEB /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D2391161A23767D007F1DEB /* util.c */; };
 		8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EEF19ED69260086FCAA /* hidmanager.m */; };
 		8D4A6EF319ED77370086FCAA /* list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A6EF219ED77370086FCAA /* list.m */; };
@@ -40,6 +41,8 @@
 		1A84931919825DC800164DF4 /* hid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hid-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		1A84931A19825DC800164DF4 /* hid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hid.1; sourceTree = "<group>"; };
 		1A84932119825DFB00164DF4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		8D083B241A3850C40043EDF0 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = "<group>"; };
+		8D083B261A3850EC0043EDF0 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		8D2391151A237671007F1DEB /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		8D2391161A23767D007F1DEB /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		8D4A6EEC19ED68570086FCAA /* setreport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setreport.m; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 			children = (
 				8DBFE22E1A09345D00109CBA /* builtin */,
 				8DBFE2301A09345D00109CBA /* builtin.h */,
+				8D083B261A3850EC0043EDF0 /* version.h */,
 				8DBFE2311A09345D00109CBA /* hid.c */,
 				8D2391151A237671007F1DEB /* util.h */,
 				8D2391161A23767D007F1DEB /* util.c */,
@@ -151,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				8DBFE22F1A09345D00109CBA /* help.c */,
+				8D083B241A3850C40043EDF0 /* version.c */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -162,6 +167,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A84931E19825DC800164DF4 /* Build configuration list for PBXNativeTarget "hid" */;
 			buildPhases = (
+				8D083B271A3851B60043EDF0 /* ShellScript */,
 				1A84930C19825DC800164DF4 /* Sources */,
 				1A84930D19825DC800164DF4 /* Frameworks */,
 				1A84930E19825DC800164DF4 /* CopyFiles */,
@@ -201,11 +207,28 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8D083B271A3851B60043EDF0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "GIT_DESCRIBE=$(git describe --tags --always)\nDATE=$(date +\"%Y-%m-%d %T\")\necho \"#ifndef VERSION\" > ../common/version.h\necho \"#define VERSION \\\"hid version $GIT_DESCRIBE\\\\nBuilt $DATE\\\" \" >> ../common/version.h\necho \"#endif VERSION\" >> ../common/version.h\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1A84930C19825DC800164DF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D083B251A3850C40043EDF0 /* version.c in Sources */,
 				8D4A6EF319ED77370086FCAA /* list.m in Sources */,
 				8DBFE2321A09345D00109CBA /* help.c in Sources */,
 				8D4A6EF019ED69260086FCAA /* hidmanager.m in Sources */,

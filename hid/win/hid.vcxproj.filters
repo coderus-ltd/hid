@@ -60,6 +60,9 @@
     <ClCompile Include="helper\commandparser.cpp">
       <Filter>Source Files\helper</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\builtin\version.c">
+      <Filter>common\builtin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\builtin.h">
@@ -80,5 +83,10 @@
     <ClInclude Include="helper\commandparser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="prebuild.bat">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -6,6 +6,9 @@
 #include <io.h>
 #include <vector>
 #include <time.h>
+#include <algorithm>
+#include <iostream>
+#include <string>
 
 extern "C"
 {
@@ -134,8 +137,8 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 		for (std::string command : commands)
 		{
 			const size_t reportDataSize = command.size() + 1; //+1 - termination character (\0)
-			const size_t sendingReportSize = caps.OutputReportByteLength == 0 ? 0x31 : caps.OutputReportByteLength;
-
+			const size_t reportSize = reportType == L"output" ? caps.OutputReportByteLength : caps.FeatureReportByteLength;
+			const size_t sendingReportSize = (std::min)(reportDataSize, reportSize);
 			if (reportDataSize > sendingReportSize)
 			{
 				std::cout << "warn: report larger than maximum size" << std::endl;

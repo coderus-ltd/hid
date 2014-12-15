@@ -21,12 +21,18 @@ static int info_execution_block(std::wstring device, bool* foundDevice)
         std::wstring product = hid_device.get_product_string(handle);
         std::wstring serial = hid_device.get_serial_string(handle);
 
+		//remove 0x
+		std::string vendorID = hid_device.number_to_hex_string(attributes.VendorID);
+		std::string productID = hid_device.number_to_hex_string(attributes.ProductID);
+		vendorID = vendorID.find("0x") == 0 ? vendorID.substr(2, vendorID.length()) : vendorID;
+		productID = productID.find("0x") == 0 ? productID.substr(2, productID.length()) : productID;
+
         std::cout  << "================================================================" << std::endl;
         // USB should be modified to be other types should they become supported
         std::wcout << hid_device.clean_string(product) << " via " << "USB" << std::endl;
         std::cout  << "================================================================" << std::endl;
-        std::cout  << "VendorID: " << hid_device.number_to_hex_string(attributes.VendorID) << std::endl;
-        std::cout  << "ProductID: " << hid_device.number_to_hex_string(attributes.ProductID) << std::endl;
+		std::cout  << "VendorID: " << vendorID << std::endl;
+		std::cout  << "ProductID: " << productID << std::endl;
         std::cout  << "VersionNumber: " << attributes.VersionNumber << std::endl;
         std::wcout << "Manufacturer: " << hid_device.clean_string(manufacturer) << std::endl;
         std::wcout << "Product: " << hid_device.clean_string(product) << std::endl;

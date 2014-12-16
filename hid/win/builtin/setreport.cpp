@@ -63,7 +63,7 @@ static char* readData(HANDLE& handle, HidDevice hid_device) {
 			}
 		}
 
-		res = WaitForSingleObject(ev, waitTime == 0 ? 1000 : waitTime * 1000);
+		res = WaitForSingleObject(ev, waitTime == 0 ? 100 : waitTime * 1000);
 		if (res != WAIT_OBJECT_0)
 		{
 			CloseHandle(ev);
@@ -128,10 +128,11 @@ static int setreport_execution_block(std::wstring device, bool* foundDevice)
 	*foundDevice = true;
 	HidDevice hid_device(device);
 	HANDLE handle = hid_device.get_device_handle(device);
-	HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
 
 	if (handle != 0 && handle != INVALID_HANDLE_VALUE)
 	{
+        HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
+
 		for (std::string command : commands)
 		{
 			const size_t reportDataSize = command.size() + 1; //+1 - termination character (\0)

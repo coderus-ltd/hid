@@ -31,7 +31,7 @@ static int info_execution_block(std::wstring device, bool* foundDevice)
         std::wcout << "Manufacturer: " << hid_device.clean_string(manufacturer) << std::endl;
         std::wcout << "Product: " << hid_device.clean_string(product) << std::endl;
         std::wcout << "SerialNumber: " << hid_device.clean_string(serial) << std::endl;
-        std::wcout << "LocationID: " << hid_device.get_device_path() << std::endl;
+        std::wcout << "LocationID: " << hid_device.get_sanitised_device_path(hid_device.get_device_path()) << std::endl;
         std::cout  << "PrimaryUsagePage: " << hid_device.number_to_hex_string(capabilities.UsagePage) << std::endl;
         std::cout  << "PrimaryUsage: " << capabilities.Usage << std::endl;
         std::cout  << "MaxInputReportSize: " << capabilities.InputReportByteLength << std::endl;

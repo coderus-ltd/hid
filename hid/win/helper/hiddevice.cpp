@@ -34,6 +34,17 @@ std::wstring HidDevice::get_device_path()
     return device_path;
 }
 
+
+std::wstring HidDevice::get_sanitised_device_path(std::wstring devicePath)
+{
+    int firstHashIndex = devicePath.find_first_of(L"#", 8) + 1;
+    int lastHashIndex = devicePath.find_last_of(L"#");
+
+    std::wstring retvalue = devicePath.substr(firstHashIndex, lastHashIndex - firstHashIndex);
+
+    return retvalue;
+}
+
 HANDLE HidDevice::get_device_handle(std::wstring devicePath)
 {
     HANDLE handle = CreateFile(
@@ -42,7 +53,7 @@ HANDLE HidDevice::get_device_handle(std::wstring devicePath)
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         0,
         OPEN_EXISTING,
-		FILE_FLAG_OVERLAPPED,
+        FILE_FLAG_OVERLAPPED,
         0);
 
     return handle;

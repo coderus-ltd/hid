@@ -18,19 +18,19 @@ static int getreport_execution_block(std::wstring device, bool* foundDevice)
 
     if (handle != 0 && handle != INVALID_HANDLE_VALUE)
     {
-		HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
+        HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
 
-		//prepare the report
-		const size_t reportDataSize = caps.OutputReportByteLength;
-		char* reportData = new char[reportDataSize];
+        //prepare the report
+        const size_t reportDataSize = caps.OutputReportByteLength;
+        char* reportData = new char[reportDataSize];
 
-		// set report id
-		reportData[0] = 0x01;
-		if (HidD_GetInputReport(handle, reportData, reportDataSize)) {
-			std::cout << reportData << std::endl;
-		} else {
-			std::cout << "getreport: get error (Code: "<< GetLastError() << ")" << std::endl;
-		}
+        // set report id
+        reportData[0] = 0x01;
+        if (HidD_GetInputReport(handle, reportData, reportDataSize)) {
+            std::cout << reportData << std::endl;
+        } else {
+            std::cout << "getreport: get error (Code: "<< GetLastError() << ")" << std::endl;
+        }
 
         CloseHandle(handle);
     }
@@ -40,6 +40,6 @@ static int getreport_execution_block(std::wstring device, bool* foundDevice)
 
 int cmd_getreport(int argc, const char **argv)
 {
-	HidManager hid_manager;
+    HidManager hid_manager;
     return hid_manager.process_devices(argc, argv, &getreport_execution_block);
 }

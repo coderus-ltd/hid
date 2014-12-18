@@ -15,9 +15,12 @@ public:
 
     std::wstring get_device_path();
 
+    // Gets a sanitised version of the location ID for display
+    std::wstring get_sanitised_device_path(std::wstring);
+
     // Get a HANDLE to the device
     HANDLE get_device_handle(std::wstring);
-
+    
     // Get a HANDLE to the device override which uses the path from the constructor
     HANDLE get_device_handle();
 

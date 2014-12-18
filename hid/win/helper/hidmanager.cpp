@@ -38,11 +38,12 @@ static std::wstring get_device_path(HDEVINFO hInfoSet, SP_DEVICE_INTERFACE_DATA 
 // Format is vid_0000&pid_0000
 static std::wstring get_search_string(int argc, const char **argv)
 {
+    // TODO :: We should be able to filter by LID (-l)
     std::wstring ret;
-	std::wstring rawVid = get_w_param(argc, argv, "-v");
-	std::wstring rawPid = get_w_param(argc, argv, "-p");
-	std::wstring vid = rawVid.find(L"0x") == 0 ? rawVid.substr(2, rawVid.length()) : rawVid;
-	std::wstring pid = rawPid.find(L"0x") == 0 ? rawPid.substr(2, rawPid.length()) : rawPid;
+    std::wstring rawVid = get_w_param(argc, argv, "-v");
+    std::wstring rawPid = get_w_param(argc, argv, "-p");
+    std::wstring vid = rawVid.find(L"0x") == 0 ? rawVid.substr(2, rawVid.length()) : rawVid;
+    std::wstring pid = rawPid.find(L"0x") == 0 ? rawPid.substr(2, rawPid.length()) : rawPid;
 
     if (!vid.empty() && !pid.empty())
     {
@@ -57,6 +58,31 @@ static std::wstring get_search_string(int argc, const char **argv)
         ret = L"pid_" + pid;
     }
 
+    return ret;
+}
+
+static std::vector<std::wstring> get_search_strings(int argc, const char **argv)
+{
+    std::vector<std::wstring> ret;
+    std::wstring rawVid = get_w_param(argc, argv, "-v");
+    std::wstring rawPid = get_w_param(argc, argv, "-p");
+
+    std::wstring vid = rawVid.find(L"0x") == 0 ? rawVid.substr(2, rawVid.length()) : rawVid;
+    std::wstring pid = rawPid.find(L"0x") == 0 ? rawPid.substr(2, rawPid.length()) : rawPid;
+    std::wstring lid = get_w_param(argc, argv, "-l");
+    
+    // Vid
+    if (!vid.empty())
+        ret.push_back(L"vid_" + vid);
+        
+    // Pid
+    if (!pid.empty())
+        ret.push_back(L"pid_" + pid);
+    
+    // Lid
+    if (!lid.empty())
+        ret.push_back(lid);
+    
     return ret;
 }
 
@@ -75,6 +101,32 @@ static bool compare_path_and_search_location(std::wstring devicePath, std::wstri
     else
     {
         ret = devicePath.find(searchLocation) != std::string::npos;
+    }
+
+    return ret;
+}
+
+// Compare the devicePath and searchLocation strings to see if we should include it in the found devices
+static bool compare_path_and_search_locations(std::wstring devicePath, std::vector<std::wstring> searchLocations)
+{
+    bool ret;
+    if (devicePath.empty())
+    {
+        ret = false;
+    }
+    else if (searchLocations.size() == 0)
+    {
+        ret = true;
+    }
+    else
+    {
+        for (int i = 0; i < searchLocations.size(); i++)
+        {
+            ret = devicePath.find(searchLocations[i]) != std::string::npos;
+
+            if (!ret) 
+                break;
+        }
     }
 
     return ret;
@@ -102,7 +154,7 @@ int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock 
     int result = 0;
     int nIndex = 0;
 
-    std::wstring searchString = get_search_string(argc, argv);
+    std::vector<std::wstring> searchStrings = get_search_strings(argc, argv);
     std::vector<std::wstring> foundDevices;
 
     SP_DEVICE_INTERFACE_DATA oInterface;
@@ -111,7 +163,7 @@ int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock 
     while (SetupDiEnumDeviceInterfaces(hInfoSet, NULL, &guid, nIndex, &oInterface))
     {
         std::wstring strDevicePath = get_device_path(hInfoSet, oInterface);
-        if (compare_path_and_search_location(strDevicePath, searchString))
+        if (compare_path_and_search_locations(strDevicePath, searchStrings))
         {
             foundDevices.push_back(strDevicePath);
         }

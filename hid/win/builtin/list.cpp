@@ -19,7 +19,7 @@ static int list_execution_block(std::wstring device, bool* foundDevice)
     {
         HIDD_ATTRIBUTES attributes = hid_device.get_device_attributes(handle);
         
-        std::wcout << "LID" << "\t";
+        std::wcout << hid_device.get_sanitised_device_path(hid_device.get_device_path()) << "\t";
         std::cout << hid_device.number_to_hex_string(attributes.VendorID) << "\t";
         std::cout << hid_device.number_to_hex_string(attributes.ProductID) << "\t";
 
@@ -44,6 +44,6 @@ static int list_execution_block(std::wstring device, bool* foundDevice)
 int cmd_list(int argc, const char **argv)
 {
     HidManager hid_manager;
-    std::cout << "LID\tVID\tPID\tDescription" << std::endl;
+    std::cout << "LID\t\t\tVID\tPID\tDescription" << std::endl;
     return hid_manager.process_devices(argc, argv, &list_execution_block);
 }

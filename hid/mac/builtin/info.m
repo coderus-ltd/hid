@@ -37,7 +37,7 @@ int cmd_info(int argc, const char **argv)
             "%s: %04x\n"
             "%s: %d\n"
             "%s: %04x\n"
-            "%s: %d\n"
+            "%s: %x\n"
             "%s: %s\n"
             "%s: %s\n"
             "%s: %s\n"

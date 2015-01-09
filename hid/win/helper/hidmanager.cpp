@@ -120,7 +120,7 @@ static bool compare_path_and_search_locations(std::wstring devicePath, std::vect
     }
     else
     {
-        for (int i = 0; i < searchLocations.size(); i++)
+        for (unsigned int i = 0; i < searchLocations.size(); i++)
         {
             ret = devicePath.find(searchLocations[i]) != std::string::npos;
 

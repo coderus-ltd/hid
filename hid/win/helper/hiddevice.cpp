@@ -13,6 +13,7 @@ static int find_null_termination(unsigned char buffer[], std::wstring searchStri
         if (buffer[i] == '\0' && buffer[i + 1] == '\0')
         {
             retvalue = i;
+            break;
         }
     }
 
@@ -132,7 +133,7 @@ std::wstring HidDevice::get_serial_string(HANDLE handle)
 
 std::wstring HidDevice::clean_string(std::wstring old_string)
 {
-    std::wstring ret;
+    std::wstring ret = L"";
     for (unsigned int i = 0; i < old_string.length(); i++)
     {
         if (old_string[i] != '\0')

@@ -3,6 +3,7 @@
 #include<windows.h>
 #include<setupapi.h>
 
+#include "hiddevice.h"
 #include "hidmanager.h"
 #include "commandparser.h"
 
@@ -154,6 +155,15 @@ int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock 
     int result = 0;
     int nIndex = 0;
 
+	int usagePage = -1;
+
+	std::wstring _usagePage = get_w_param(argc, argv, "-u");
+	if (!_usagePage.empty())
+	{
+		int decVal = std::stoul(_usagePage, nullptr, 16);
+		usagePage = decVal;
+	}
+
     std::vector<std::wstring> searchStrings = get_search_strings(argc, argv);
     std::vector<std::wstring> foundDevices;
 
@@ -165,7 +175,25 @@ int HidManager::process_devices(int argc, const char **argv, ProcessDeviceBlock 
         std::wstring strDevicePath = get_device_path(hInfoSet, oInterface);
         if (compare_path_and_search_locations(strDevicePath, searchStrings))
         {
-            foundDevices.push_back(strDevicePath);
+			if (usagePage != -1)
+			{
+				HidDevice hid_device(strDevicePath);
+				HANDLE handle = hid_device.get_device_handle(strDevicePath);
+
+				if (handle != 0 && handle != INVALID_HANDLE_VALUE)
+				{
+					HIDP_CAPS caps = hid_device.get_device_capabilities(handle);
+					if (caps.UsagePage == usagePage)
+					{
+						foundDevices.push_back(strDevicePath);
+					}
+					CloseHandle(handle);
+				}
+			}
+			else 
+			{
+				foundDevices.push_back(strDevicePath);
+			}
         }
 
         nIndex++;

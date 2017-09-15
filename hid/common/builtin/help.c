@@ -34,6 +34,7 @@ int cmd_help(int argc, const char **argv)
             "    -l <hex>   Filter by the given location ID\n"
             "    -v <hex>   Filter by the given vendor ID\n"
             "    -p <hex>   Filter by the given product ID\n"
+            "    -u <hex>   Filter by the given usage page\n"
             "\n"
             "See 'hid help <command>' for more information on a specific command.\n");
     

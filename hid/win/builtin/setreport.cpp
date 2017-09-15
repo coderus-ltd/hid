@@ -29,7 +29,7 @@ static std::string dataFromHexString(std::string hexString) {
 		std::string _hexByteStr = _hex.substr(i, 2);
 		int decVal = std::stoul(_hexByteStr, nullptr, 16);
 		chars[byte] = decVal;
-		i = +2;
+		i += 2;
 		byte++;
 	}
 	chars[byte] = 0;
